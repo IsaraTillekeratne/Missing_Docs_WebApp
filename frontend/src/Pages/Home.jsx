@@ -19,10 +19,10 @@ export default function Home() {
                     <Skeleton
                         sx={{ bgcolor: 'grey.900' }}
                         variant="rectangular"
-                        width={710}
-                        height={80}
+                        width={712}
+                        height={60}
                     />
-                    <div style={{ marginLeft: "160px" }}>
+                    <div style={{ marginLeft: "165px" }}>
 
                         <Button variant="contained" size="large" style={{ margin: "50px", backgroundColor: "#30475E" }}>
                             Sign Up
