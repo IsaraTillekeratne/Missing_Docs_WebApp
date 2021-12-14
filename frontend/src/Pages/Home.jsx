@@ -20,7 +20,7 @@ export default function Home() {
                         sx={{ bgcolor: 'grey.900' }}
                         variant="rectangular"
                         width={712}
-                        height={60}
+                        height={40}
                     />
                     <div style={{ marginLeft: "165px" }}>
 
