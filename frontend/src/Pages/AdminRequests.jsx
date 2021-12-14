@@ -39,7 +39,7 @@ function AdminRequests(props) {
 
                     }}
                 >
-                    <SideBar />
+                    <SideBar user='A' />
                 </Drawer>
                 <Drawer
                     variant="permanent"
@@ -50,7 +50,7 @@ function AdminRequests(props) {
                     }}
                     open
                 >
-                    <SideBar />
+                    <SideBar user='A' />
                 </Drawer>
             </Box>
             <Box

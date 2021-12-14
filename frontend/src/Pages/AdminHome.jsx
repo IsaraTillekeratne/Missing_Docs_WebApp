@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
@@ -40,7 +39,7 @@ function AdminHome(props) {
 
                     }}
                 >
-                    <SideBar />
+                    <SideBar user='A' />
                 </Drawer>
                 <Drawer
                     variant="permanent"
@@ -51,7 +50,7 @@ function AdminHome(props) {
                     }}
                     open
                 >
-                    <SideBar />
+                    <SideBar user='A' />
                 </Drawer>
             </Box>
             <Box

@@ -4,17 +4,27 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Link from '@mui/material/Link';
 import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import DocumentScannerRoundedIcon from '@mui/icons-material/DocumentScannerRounded';
 import User from './User';
 
-export default function SideBar() {
+export default function SideBar(props) {
 
-    const links = ['./AdminTeams', './AdminCreateTeams', './AdminRequests', './AdminDocs']
-    const icons = [<GroupsRoundedIcon />, <AddCircleRoundedIcon />, <SendRoundedIcon />, <DocumentScannerRoundedIcon />]
+    let links;
+    let icons;
+    let titles;
+
+    if (props.user == 'A') {
+        links = ['./AdminTeams', './AdminCreateTeams', './AdminRequests', './AdminDocs']
+        icons = [<GroupsRoundedIcon />, <AddCircleRoundedIcon />, <SendRoundedIcon />, <DocumentScannerRoundedIcon />]
+        titles = ['Teams', 'Create Teams', 'Requests', 'Documents']
+    } else if (props.user == 'L') {
+        links = ['./LeaderClients', './LeaderMembers']
+        icons = [<DocumentScannerRoundedIcon />, <GroupsRoundedIcon />]
+        titles = ['Clients', 'Team Members']
+    }
 
     function renderIcon(index) {
         return icons[index];
@@ -25,7 +35,7 @@ export default function SideBar() {
             <User />
             <Divider />
             <List>
-                {['Teams', 'Create Teams', 'Requests', 'Documents'].map((text, index) => (
+                {titles.map((text, index) => (
                     <ListItem button key={text} component="a" href={links[index]}>
                         <ListItemIcon>{renderIcon(index)}</ListItemIcon>
                         <ListItemText primary={text} />

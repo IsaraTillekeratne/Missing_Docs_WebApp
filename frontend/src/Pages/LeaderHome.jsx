@@ -3,22 +3,21 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
-import CreateTeamForm from '../components/CreateTeamForm';
+import { Typography } from '@mui/material';
 
 const drawerWidth = 240;
 
-function AdminCreateTeams(props) {
+function LeaderHome(props) {
     const { window } = props;
     const { mobileOpen, handleDrawerToggle } = SideBarLogic();
     const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <TopBar title="Create Teams" />
+            <TopBar title="Clients" />
             <Box
                 component="nav"
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -40,7 +39,7 @@ function AdminCreateTeams(props) {
 
                     }}
                 >
-                    <SideBar user='A' />
+                    <SideBar user='L' />
                 </Drawer>
                 <Drawer
                     variant="permanent"
@@ -51,7 +50,7 @@ function AdminCreateTeams(props) {
                     }}
                     open
                 >
-                    <SideBar user='A' />
+                    <SideBar user='L' />
                 </Drawer>
             </Box>
             <Box
@@ -59,14 +58,14 @@ function AdminCreateTeams(props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <CreateTeamForm />
+                <Typography>Leader Home Page</Typography>
 
             </Box>
         </Box>
     );
 }
 
-AdminCreateTeams.propTypes = {
+LeaderHome.propTypes = {
     /**
      * Injected by the documentation to work in an iframe.
      * You won't need it on your project.
@@ -74,4 +73,4 @@ AdminCreateTeams.propTypes = {
     window: PropTypes.func,
 };
 
-export default AdminCreateTeams;
+export default LeaderHome;
