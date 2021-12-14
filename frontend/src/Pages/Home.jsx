@@ -24,10 +24,10 @@ export default function Home() {
                     />
                     <div style={{ marginLeft: "165px" }}>
 
-                        <Button variant="contained" size="large" style={{ margin: "50px", backgroundColor: "#30475E" }}>
+                        <Button variant="contained" size="large" style={{ margin: "50px", backgroundColor: "#30475E" }} component="a" href='./Signup'>
                             Sign Up
                         </Button>
-                        <Button variant="contained" size="large" style={{ backgroundColor: "#30475E" }}>
+                        <Button variant="contained" size="large" style={{ backgroundColor: "#30475E" }} component="a" href='./Signin'>
                             Sign in
                         </Button>
                     </div>

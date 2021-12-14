@@ -9,7 +9,7 @@ import SideBarLogic from '../Pages/SideBarLogic';
 
 const drawerWidth = 240;
 
-export default function TopBar() {
+export default function TopBar(props) {
 
     const { mobileOpen, handleDrawerToggle } = SideBarLogic();
     return (<div>
@@ -33,7 +33,7 @@ export default function TopBar() {
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" noWrap component="div" color={"#222831"}>
-                    Page Title
+                    {props.title}
                 </Typography>
             </Toolbar>
         </AppBar>

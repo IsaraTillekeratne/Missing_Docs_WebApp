@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function BasicSelect() {
+export default function BasicSelect(props) {
     const [userType, setUserType] = React.useState('');
 
     const handleChange = (event) => {
@@ -15,7 +15,9 @@ export default function BasicSelect() {
     return (
         <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
-                <InputLabel id="select-label">User Type</InputLabel>
+                <InputLabel id="select-label">
+                    {props.isLogin == 'true' ? 'User Type' : 'Select'}
+                </InputLabel>
                 <Select
                     labelId="select-label"
                     id="simple-select"

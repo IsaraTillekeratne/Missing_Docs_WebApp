@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
+import CreateTeamForm from '../components/CreateTeamForm';
 
 const drawerWidth = 240;
 
@@ -17,7 +18,7 @@ function AdminCreateTeams(props) {
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <TopBar />
+            <TopBar title="Create Teams" />
             <Box
                 component="nav"
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -58,9 +59,7 @@ function AdminCreateTeams(props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <Typography paragraph>
-                    Admin Create Teams Page
-                </Typography>
+                <CreateTeamForm />
 
             </Box>
         </Box>

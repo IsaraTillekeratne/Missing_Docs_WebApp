@@ -17,7 +17,7 @@ function AdminRequests(props) {
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <TopBar />
+            <TopBar title="Backup Requests" />
             <Box
                 component="nav"
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
