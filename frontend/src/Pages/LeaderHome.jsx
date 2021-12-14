@@ -7,6 +7,7 @@ import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
 import { Typography } from '@mui/material';
+import ClientsTable from '../components/ClientsTable';
 
 const drawerWidth = 240;
 
@@ -58,7 +59,7 @@ function LeaderHome(props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <Typography>Leader Home Page</Typography>
+                <ClientsTable />
 
             </Box>
         </Box>

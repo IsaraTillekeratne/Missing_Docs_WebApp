@@ -16,11 +16,11 @@ export default function SideBar(props) {
     let icons;
     let titles;
 
-    if (props.user == 'A') {
+    if (props.user === 'A') {
         links = ['./AdminTeams', './AdminCreateTeams', './AdminRequests', './AdminDocs']
         icons = [<GroupsRoundedIcon />, <AddCircleRoundedIcon />, <SendRoundedIcon />, <DocumentScannerRoundedIcon />]
         titles = ['Teams', 'Create Teams', 'Requests', 'Documents']
-    } else if (props.user == 'L') {
+    } else if (props.user === 'L') {
         links = ['./LeaderClients', './LeaderMembers']
         icons = [<DocumentScannerRoundedIcon />, <GroupsRoundedIcon />]
         titles = ['Clients', 'Team Members']

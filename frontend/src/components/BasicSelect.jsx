@@ -16,7 +16,7 @@ export default function BasicSelect(props) {
         <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
                 <InputLabel id="select-label">
-                    {props.isLogin == 'true' ? 'User Type' : 'Select'}
+                    {props.isLogin === 'true' ? 'User Type' : 'Select'}
                 </InputLabel>
                 <Select
                     labelId="select-label"

@@ -7,36 +7,39 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import ClientListDropDown from './ClientListDropDown';
 
 const columns = [
-    { id: 'number', label: 'Number', minWidth: 170 },
-    { id: 'leaderName', label: 'Leader Name', minWidth: 100 },
-    { id: 'leaderEmail', label: 'Leader Email', minWidth: 170, align: 'right', },
-    { id: 'members', label: 'Team Members', minWidth: 170, align: 'right', },
-    { id: 'delete', label: 'Delete Team', minWidth: 170, align: 'right', },
+    { id: 'memberId', label: 'Member Id', minWidth: 170 },
+    { id: 'name', label: 'Member Name', minWidth: 100 },
+    { id: 'email', label: 'Member Email', minWidth: 170, align: 'right', },
+    { id: 'icon', label: 'Add Clients', minWidth: 170, align: 'right', },
 ];
 
+const showIcon = () => {
+
+    return (<ClientListDropDown />);
+}
 
 const rows = [
-    { number: '1', leaderName: 'IN', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '2', leaderName: 'CN', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '3', leaderName: 'IT', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '4', leaderName: 'US', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '5', leaderName: 'CA', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '6', leaderName: 'AU', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '7', leaderName: 'DE', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '8', leaderName: 'IE', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '9', leaderName: 'MX', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '10', leaderName: 'JP', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '11', leaderName: 'FR', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '12', leaderName: 'GB', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '13', leaderName: 'RU', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '14', leaderName: 'NG', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '15', leaderName: 'BR', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
+    { memberId: '1', name: 'IN', email: 'isara@gmail.com', icon: showIcon() },
+    { memberId: '2', name: 'CN', email: 'isara@gmail.com', icon: showIcon() },
+    { memberId: '3', name: 'IT', email: 'isara@gmail.com', icon: showIcon() },
+    { memberId: '4', name: 'US', email: 'isara@gmail.com', icon: showIcon() },
+    { memberId: '5', name: 'CA', email: 'isara@gmail.com', icon: showIcon() },
+    { memberId: '6', name: 'AU', email: 'isara@gmail.com', icon: showIcon() },
+    { memberId: '7', name: 'DE', email: 'isara@gmail.com', icon: showIcon() },
+    { memberId: '8', name: 'IE', email: 'isara@gmail.com', icon: showIcon() },
+    { memberId: '9', name: 'MX', email: 'isara@gmail.com', icon: showIcon() },
+    { memberId: '10', name: 'JP', email: 'isara@gmail.com', icon: showIcon() },
+    { memberId: '11', name: 'FR', email: 'isara@gmail.com', icon: showIcon() },
+    { memberId: '12', name: 'GB', email: 'isara@gmail.com', icon: showIcon() },
+    { memberId: '13', name: 'RU', email: 'isara@gmail.com', icon: showIcon() },
+    { memberId: '14', name: 'NG', email: 'isara@gmail.com', icon: showIcon() },
+    { memberId: '15', name: 'BR', email: 'isara@gmail.com', icon: showIcon() },
 ];
 
-export default function StickyHeadTable() {
+export default function MembersTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -71,7 +74,7 @@ export default function StickyHeadTable() {
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.number} >
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.memberId}>
                                         {columns.map((column) => {
                                             const value = row[column.id];
                                             return (

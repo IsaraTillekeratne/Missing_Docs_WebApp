@@ -6,7 +6,9 @@ import Toolbar from '@mui/material/Toolbar';
 import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
-import { Typography } from '@mui/material';
+import SaveIcon from '@mui/icons-material/Save';
+import MembersTable from '../components/MembersTable';
+import Button from '@mui/material/Button';
 
 const drawerWidth = 240;
 
@@ -15,7 +17,7 @@ function LeaderMembers(props) {
     const { mobileOpen, handleDrawerToggle } = SideBarLogic();
     const container = window !== undefined ? () => window().document.body : undefined;
 
-    return (
+    return (<div>
         <Box sx={{ display: 'flex' }}>
             <TopBar title="Team Members" />
             <Box
@@ -58,10 +60,15 @@ function LeaderMembers(props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <Typography>Leader Members Page</Typography>
-
+                <MembersTable />
+                <Button variant="contained" endIcon={<SaveIcon />} sx={{ marginTop: '20px' }}>
+                    Save Changes
+                </Button>
             </Box>
+
         </Box>
+
+    </div>
     );
 }
 
