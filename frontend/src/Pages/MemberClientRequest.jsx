@@ -6,21 +6,20 @@ import Toolbar from '@mui/material/Toolbar';
 import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
-import CreateTeamForm from '../components/CreateTeamForm';
-import AllUsersTable from '../components/AllUsersTable';
-import SaveIcon from '@mui/icons-material/Save';
-import Button from '@mui/material/Button';
+import RequestsTable from '../components/RequestsTable';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 
 const drawerWidth = 240;
 
-function AdminCreateTeams(props) {
+function MemberClientRequest(props) {
     const { window } = props;
     const { mobileOpen, handleDrawerToggle } = SideBarLogic();
     const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <TopBar title="Create Teams" />
+            <TopBar title="Requests" />
             <Box
                 component="nav"
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -42,7 +41,7 @@ function AdminCreateTeams(props) {
 
                     }}
                 >
-                    <SideBar user='A' />
+                    <SideBar user='M' />
                 </Drawer>
                 <Drawer
                     variant="permanent"
@@ -53,7 +52,7 @@ function AdminCreateTeams(props) {
                     }}
                     open
                 >
-                    <SideBar user='A' />
+                    <SideBar user='M' />
                 </Drawer>
             </Box>
             <Box
@@ -61,18 +60,17 @@ function AdminCreateTeams(props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <CreateTeamForm />
-                <h3>All Users</h3>
-                <AllUsersTable />
-                <Button variant="contained" endIcon={<SaveIcon />} sx={{ marginTop: '20px' }}>
-                    Save Changes
-                </Button>
+                <RequestsTable user='M' />
+                <Fab color="primary" aria-label="add" sx={{ marginTop: '20px' }}>
+                    <AddIcon />
+                </Fab>
+
             </Box>
         </Box>
     );
 }
 
-AdminCreateTeams.propTypes = {
+MemberClientRequest.propTypes = {
     /**
      * Injected by the documentation to work in an iframe.
      * You won't need it on your project.
@@ -80,4 +78,4 @@ AdminCreateTeams.propTypes = {
     window: PropTypes.func,
 };
 
-export default AdminCreateTeams;
+export default MemberClientRequest;

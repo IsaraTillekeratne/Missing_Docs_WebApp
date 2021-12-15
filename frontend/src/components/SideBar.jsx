@@ -24,6 +24,10 @@ export default function SideBar(props) {
         links = ['./LeaderClients', './LeaderMembers']
         icons = [<DocumentScannerRoundedIcon />, <GroupsRoundedIcon />]
         titles = ['Clients', 'Team Members']
+    } else if (props.user === 'M') {
+        links = []
+        icons = []
+        titles = []
     }
 
     function renderIcon(index) {

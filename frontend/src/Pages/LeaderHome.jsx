@@ -6,7 +6,6 @@ import Toolbar from '@mui/material/Toolbar';
 import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
-import { Typography } from '@mui/material';
 import ClientsTable from '../components/ClientsTable';
 
 const drawerWidth = 240;

@@ -42,8 +42,8 @@ export default function CreateTeamForm() {
     };
 
     return (
-        <Box sx={{ maxWidth: 400 }}>
-            <Stepper activeStep={activeStep} orientation="vertical">
+        <Box sx={{ maxWidth: 1050 }}>
+            <Stepper activeStep={activeStep} orientation="horizontal">
                 {steps.map((step, index) => (
                     <Step key={step.label}>
                         <StepLabel
