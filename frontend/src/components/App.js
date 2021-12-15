@@ -13,6 +13,8 @@ import LeaderMembers from '../Pages/LeaderMembers';
 import LeaderClientRequest from '../Pages/LeaderClientRequest';
 import MemberHome from '../Pages/MemberHome';
 import MemberClientRequest from '../Pages/MemberClientRequest';
+import ClientHome from '../Pages/ClientHome';
+import ClientProvided from '../Pages/ClientProvided';
 
 function App() {
     return (
@@ -32,6 +34,9 @@ function App() {
                 <Route path="/LeaderMembers" element={<LeaderMembers />} />
                 <Route path="/MemberHome" element={<MemberHome />} />
                 <Route path="/MemberClientRequest" element={<MemberClientRequest />} />
+                <Route path="/ClientHome" element={<ClientHome />} />
+                <Route path="/ClientActual" element={<ClientHome />} />
+                <Route path="/ClientProvided" element={<ClientProvided />} />
 
                 <Route path="*" element={<ErrorPage />} />
             </Routes>

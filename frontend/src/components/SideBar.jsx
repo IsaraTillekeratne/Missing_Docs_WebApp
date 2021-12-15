@@ -28,6 +28,10 @@ export default function SideBar(props) {
         links = []
         icons = []
         titles = []
+    } else if (props.user === 'C' || props.user === 'CP') {
+        links = ['./ClientActual', './ClientProvided']
+        icons = [<DocumentScannerRoundedIcon />, <DocumentScannerRoundedIcon />]
+        titles = ['Actual Requests', 'Provided Requests']
     }
 
     function renderIcon(index) {

@@ -10,28 +10,31 @@ import TableRow from '@mui/material/TableRow';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import IconButton from '@mui/material/IconButton';
+import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
 const columnsLeader = [
     { id: 'requestId', label: 'Request Id', minWidth: 120 },
     { id: 'docName', label: 'Document Name', minWidth: 150 },
-    { id: 'price', label: 'Price', minWidth: 150, align: 'left', },
+    { id: 'price', label: 'Price', minWidth: 100, align: 'left', },
     { id: 'comments', label: 'Comments', minWidth: 200, align: 'left', },
-    { id: 'docDate', label: 'Document Date', minWidth: 150, align: 'right', },
-    { id: 'placedDate', label: 'Placed Date', minWidth: 150, align: 'right', },
+    { id: 'docDate', label: 'Document Date', minWidth: 120, align: 'right', },
+    { id: 'placedDate', label: 'Placed Date', minWidth: 120, align: 'right', },
     { id: 'memberEmail', label: 'Member Email', minWidth: 150, align: 'right', },
+    { id: 'doc', label: 'Document', minWidth: 100, align: 'right', },
 ];
 
 
 const rowsLeader = [
-    { requestId: '1', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com' },
-    { requestId: '2', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com' },
-    { requestId: '3', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com' },
-    { requestId: '4', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com' },
-    { requestId: '5', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com' },
-    { requestId: '6', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com' },
-    { requestId: '7', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com' },
-    { requestId: '8', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com' },
-    { requestId: '9', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com' },
+    { requestId: '1', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
+    { requestId: '2', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
+    { requestId: '3', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
+    { requestId: '4', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
+    { requestId: '5', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
+    { requestId: '6', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
+    { requestId: '7', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
+    { requestId: '8', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
+    { requestId: '9', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
 ];
 
 const showIconEdit = () => {
@@ -72,6 +75,43 @@ const rowsMember = [
     { requestId: '9', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', doc: 'Dummy Doc', edit: showIconEdit(), delete: showIconDel() },
 ];
 
+const showIconUpload = () => {
+    return (<IconButton>
+        <FileUploadRoundedIcon />
+    </IconButton>);
+}
+
+const showIconMark = () => {
+    return (<IconButton>
+        <CheckCircleRoundedIcon />
+    </IconButton>);
+}
+
+const columnsClient = [
+    { id: 'requestId', label: 'Request Id', minWidth: 120 },
+    { id: 'docName', label: 'Document Name', minWidth: 150 },
+    { id: 'price', label: 'Price', minWidth: 100, align: 'left', },
+    { id: 'comments', label: 'Comments', minWidth: 200, align: 'left', },
+    { id: 'docDate', label: 'Document Date', minWidth: 120, align: 'right', },
+    { id: 'placedDate', label: 'Placed Date', minWidth: 120, align: 'right', },
+    { id: 'memberEmail', label: 'Member Email', minWidth: 150, align: 'right', },
+    { id: 'uploadDoc', label: 'Upload', minWidth: 80, align: 'right', },
+    { id: 'mark', label: '', minWidth: 50, align: 'right', },
+];
+
+
+const rowsClient = [
+    { requestId: '1', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
+    { requestId: '2', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
+    { requestId: '3', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
+    { requestId: '4', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
+    { requestId: '5', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
+    { requestId: '6', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
+    { requestId: '7', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
+    { requestId: '8', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
+    { requestId: '9', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
+];
+
 export default function RequestsTable(props) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -88,12 +128,16 @@ export default function RequestsTable(props) {
     let columns = [];
     let rows = [];
 
-    if (props.user === 'L') {
+    // CP means Client but provided tab
+    if (props.user === 'L' || props.user === 'CP') {
         columns = columnsLeader;
         rows = rowsLeader
     } else if (props.user === 'M') {
         columns = columnsMember;
         rows = rowsMember;
+    } else if (props.user === 'C') {
+        columns = columnsClient;
+        rows = rowsClient;
     }
 
     return (
