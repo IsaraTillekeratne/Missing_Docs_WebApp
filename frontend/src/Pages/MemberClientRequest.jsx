@@ -9,6 +9,7 @@ import SideBarLogic from './SideBarLogic';
 import RequestsTable from '../components/RequestsTable';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
+import TextBox from '../components/TextBox';
 
 const drawerWidth = 240;
 
@@ -61,6 +62,8 @@ function MemberClientRequest(props) {
             >
                 <Toolbar />
                 <RequestsTable user='M' />
+                <h3>Create New Requests</h3>
+                <TextBox />
                 <Fab color="primary" aria-label="add" sx={{ marginTop: '20px' }}>
                     <AddIcon />
                 </Fab>
