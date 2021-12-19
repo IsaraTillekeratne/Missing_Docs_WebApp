@@ -10,19 +10,40 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme();
 
 export default function Signin() {
+    let navigate = useNavigate();
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        // eslint-disable-next-line no-console
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+
+        let email = data.get('email');
+        let password = data.get('password');
+
+        // try to do validations using yup & react hook form
+        if ((email === '') || (password === '')) {
+            alert('Please fill all the fields');
+        } else {
+
+            Axios.post(`${process.env.REACT_APP_SERVER}/Signin`, {
+                userEmail: email,
+                userPassword: password,
+            }).then((response) => {
+                if (response.data.error) alert(response.data.error);
+                else {
+                    localStorage.setItem("token", response.data.token);
+                    localStorage.setItem("name", response.data.name);
+                    //setAuthState(true);
+
+                    // navigate based on user role *************************************
+                    navigate("/");
+                }
+            });
+        }
     };
 
     return (

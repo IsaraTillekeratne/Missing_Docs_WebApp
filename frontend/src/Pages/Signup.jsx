@@ -10,19 +10,37 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import BasicSelect from '../components/BasicSelect';
+import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme();
 
 export default function Signup() {
+    let navigate = useNavigate();
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        // eslint-disable-next-line no-console
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+
+        let name = data.get('name');
+        let email = data.get('email');
+        let password = data.get('password');
+
+        // try to do validations using yup & react hook form
+        if ((name === '') || (email === '') || (password === '')) {
+            alert('Please fill all the fields');
+        } else {
+
+            Axios.post(`${process.env.REACT_APP_SERVER}/Signup`, {
+                userName: name,
+                userEmail: email,
+                userPassword: password,
+            }).then((response) => {
+                if (response.data.error) alert(response.data.error);
+                else {
+                    navigate("/Signin");
+                }
+            });
+        }
     };
 
     return (
@@ -48,7 +66,7 @@ export default function Signup() {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     autoComplete="given-name"
-                                    name="firstName"
+                                    name="name"
                                     required
                                     fullWidth
                                     id="firstName"
