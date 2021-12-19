@@ -10,7 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import BasicSelect from './BasicSelect';
 
 const columns = [
-    { id: 'userId', label: 'User Id', minWidth: 170 },
+    { id: 'userId', label: 'User Id', minWidth: 100 },
     { id: 'name', label: 'Name', minWidth: 100 },
     { id: 'email', label: 'Email', minWidth: 170, align: 'left', },
     { id: 'icon', label: 'User Role', minWidth: 170, align: 'right', },

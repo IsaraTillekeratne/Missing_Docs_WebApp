@@ -11,7 +11,7 @@ import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRound
 import IconButton from '@mui/material/IconButton';
 
 const columns = [
-    { id: 'clientId', label: 'Client Id', minWidth: 170 },
+    { id: 'clientId', label: 'Client Id', minWidth: 100 },
     { id: 'name', label: 'Client Name', minWidth: 100 },
     { id: 'email', label: 'Client Email', minWidth: 170, align: 'right', },
     { id: 'icon', label: 'Show Requests', minWidth: 170, align: 'right', },
@@ -19,7 +19,7 @@ const columns = [
 
 // should change href for ./MemberClientRequest too
 const showIcon = () => {
-    return (<IconButton component="a" href='./LeaderClientRequest'>
+    return (<IconButton component="a" href='./MemberClientRequest'>
         <ArrowForwardIosRoundedIcon />
     </IconButton>);
 }
