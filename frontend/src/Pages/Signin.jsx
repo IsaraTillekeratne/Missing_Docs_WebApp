@@ -33,6 +33,8 @@ export default function Signin() {
                 userEmail: email,
                 userPassword: password,
             }).then((response) => {
+                //console.log(response);
+                // if (response.status === 400) { alert(response.data.error) }
                 if (response.data.error) alert(response.data.error);
                 else {
                     localStorage.setItem("token", response.data.token);
@@ -40,7 +42,23 @@ export default function Signin() {
                     //setAuthState(true);
 
                     // navigate based on user role *************************************
-                    navigate("/");
+                    Axios.get(`${process.env.REACT_APP_SERVER}/UserRoles/getRole`, {
+                        headers: {
+                            "x-access-token": localStorage.getItem("token")
+                        }
+                    }).then((response) => {
+                        if (response.data.role) {
+                            let role = response.data.role;
+                            if (role === 'A') navigate("/AdminHome")
+                            else if (role === 'C') navigate("/ClientHome")
+                            else if (role === 'L') navigate("/LeaderHome")
+                            else if (role === 'M') navigate("/MemberHome")
+                        }
+                        else {
+                            navigate("/NoUserRole")
+                        }
+                    })
+
                 }
             });
         }

@@ -15,6 +15,7 @@ import MemberHome from '../Pages/MemberHome';
 import MemberClientRequest from '../Pages/MemberClientRequest';
 import ClientHome from '../Pages/ClientHome';
 import ClientProvided from '../Pages/ClientProvided';
+import NoUserRole from '../Pages/NoUserRole';
 
 function App() {
     return (
@@ -37,6 +38,7 @@ function App() {
                 <Route path="/ClientHome" element={<ClientHome />} />
                 <Route path="/ClientActual" element={<ClientHome />} />
                 <Route path="/ClientProvided" element={<ClientProvided />} />
+                <Route path="/NoUserRole" element={<NoUserRole />} />
 
                 <Route path="*" element={<ErrorPage />} />
             </Routes>
