@@ -24,12 +24,13 @@ const validateToken = (req, res, next) => {
         try {
             const validToken = jwt.verify(token, jwtSecret);
             req.userRole = validToken.role; // -> user who sent the request
+            req.userId = validToken.id;
             if (validToken) {
                 return next();
             }
         }
         catch (err) {
-            res.json({ auth: false, error: err })
+            res.json({ auth: false, error: 'Invalid Token' })
         }
 
     }

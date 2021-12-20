@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme) => ({
 export default function User() {
 
     const classes = useStyles();
+    let name = localStorage.getItem("name")
 
-    return (<div><Avatar className={classes.user} alt="Andrew" src={userImg} />
-        <h3 className={classes.text}>Andrew</h3></div >);
+    return (<div><Avatar className={classes.user} alt={name} src={userImg} />
+        <h3 className={classes.text}>{name}</h3></div >);
 }

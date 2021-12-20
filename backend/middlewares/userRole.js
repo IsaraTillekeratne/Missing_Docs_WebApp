@@ -1,9 +1,9 @@
-const getRole = (req, res) => {
-    if (req.userRole === null) {
-        res.send('<h3>You are not assigned to a role. Please try later.</h3>');
+const adminRole = (req, res, next) => {
+    if (req.userRole === 'A') {
+        return next();
     } else {
-        return req.userRole;
+        return res.send({ error: 'No admin privileges' });
     }
 }
 
-module.exports = { getRole };
+module.exports = { adminRole };

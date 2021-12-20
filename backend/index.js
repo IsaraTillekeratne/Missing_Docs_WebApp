@@ -7,6 +7,7 @@ const cors = require('cors');
 const SignupRoute = require("./Routes/Signup");
 const SigninRoute = require("./Routes/Signin");
 const UserRolesRoute = require("./Routes/UserRoles");
+const AdminRoute = require("./Routes/Admin");
 
 app.use(express.json());
 
@@ -22,6 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/Signup", SignupRoute);
 app.use("/Signin", SigninRoute);
 app.use("/UserRoles", UserRolesRoute);
+app.use("/Admin", AdminRoute);
 
 app.listen(3001, function () {
     console.log('server running');

@@ -13,7 +13,8 @@ const columns = [
     { id: 'userId', label: 'User Id', minWidth: 100 },
     { id: 'name', label: 'Name', minWidth: 100 },
     { id: 'email', label: 'Email', minWidth: 170, align: 'left', },
-    { id: 'icon', label: 'User Role', minWidth: 170, align: 'right', },
+    { id: 'role', label: 'Role', minWidth: 150, align: 'left', },
+    { id: 'icon', label: 'Set Role', minWidth: 170, align: 'right', },
 ];
 
 const showIcon = () => {
@@ -21,21 +22,21 @@ const showIcon = () => {
 }
 
 const rows = [
-    { userId: '1', name: 'IN', email: 'isara@gmail.com', icon: showIcon() },
-    { userId: '2', name: 'CN', email: 'isara@gmail.com', icon: showIcon() },
-    { userId: '3', name: 'IT', email: 'isara@gmail.com', icon: showIcon() },
-    { userId: '4', name: 'US', email: 'isara@gmail.com', icon: showIcon() },
-    { userId: '5', name: 'CA', email: 'isara@gmail.com', icon: showIcon() },
-    { userId: '6', name: 'AU', email: 'isara@gmail.com', icon: showIcon() },
-    { userId: '7', name: 'DE', email: 'isara@gmail.com', icon: showIcon() },
-    { userId: '8', name: 'IE', email: 'isara@gmail.com', icon: showIcon() },
-    { userId: '9', name: 'MX', email: 'isara@gmail.com', icon: showIcon() },
-    { userId: '10', name: 'JP', email: 'isara@gmail.com', icon: showIcon() },
-    { userId: '11', name: 'FR', email: 'isara@gmail.com', icon: showIcon() },
-    { userId: '12', name: 'GB', email: 'isara@gmail.com', icon: showIcon() },
-    { userId: '13', name: 'RU', email: 'isara@gmail.com', icon: showIcon() },
-    { userId: '14', name: 'NG', email: 'isara@gmail.com', icon: showIcon() },
-    { userId: '15', name: 'BR', email: 'isara@gmail.com', icon: showIcon() },
+    { userId: '1', name: 'IN', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
+    { userId: '2', name: 'CN', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
+    { userId: '3', name: 'IT', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
+    { userId: '4', name: 'US', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
+    { userId: '5', name: 'CA', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
+    { userId: '6', name: 'AU', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
+    { userId: '7', name: 'DE', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
+    { userId: '8', name: 'IE', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
+    { userId: '9', name: 'MX', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
+    { userId: '10', name: 'JP', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
+    { userId: '11', name: 'FR', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
+    { userId: '12', name: 'GB', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
+    { userId: '13', name: 'RU', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
+    { userId: '14', name: 'NG', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
+    { userId: '15', name: 'BR', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
 ];
 
 export default function AllUsersTable() {
