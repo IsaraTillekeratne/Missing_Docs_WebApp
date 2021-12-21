@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,40 +8,55 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import BasicSelect from './BasicSelect';
+import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const columns = [
-    { id: 'userId', label: 'User Id', minWidth: 100 },
+    { id: 'id', label: 'User Id', minWidth: 100 },
     { id: 'name', label: 'Name', minWidth: 100 },
     { id: 'email', label: 'Email', minWidth: 170, align: 'left', },
     { id: 'role', label: 'Role', minWidth: 150, align: 'left', },
     { id: 'icon', label: 'Set Role', minWidth: 170, align: 'right', },
 ];
 
-const showIcon = () => {
-    return (<BasicSelect isLogin='true' />);
+const showIcon = (id) => {
+    return (<BasicSelect userId={id} />);
 }
 
-const rows = [
-    { userId: '1', name: 'IN', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
-    { userId: '2', name: 'CN', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
-    { userId: '3', name: 'IT', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
-    { userId: '4', name: 'US', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
-    { userId: '5', name: 'CA', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
-    { userId: '6', name: 'AU', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
-    { userId: '7', name: 'DE', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
-    { userId: '8', name: 'IE', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
-    { userId: '9', name: 'MX', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
-    { userId: '10', name: 'JP', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
-    { userId: '11', name: 'FR', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
-    { userId: '12', name: 'GB', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
-    { userId: '13', name: 'RU', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
-    { userId: '14', name: 'NG', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
-    { userId: '15', name: 'BR', email: 'isara@gmail.com', role: 'Admin', icon: showIcon() },
-];
-
 export default function AllUsersTable() {
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+    let navigate = useNavigate();
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        Axios.get("http://localhost:3001/Admin/allUsers", {
+            headers: {
+                "x-access-token": localStorage.getItem("token")
+            }
+        })
+            .then((response) => {
+                if (response.data.error) {
+                    console.log(response)
+                    alert(response.data.error);
+                    // redirection didnt work
+                    if ((response.data.auth) && (response.data.auth === false)) {
+                        navigate('/Signin');
+                    }
+                } else {
+                    setUsers(response.data);
+                }
+            })
+    }, []);
+
+    users.map((user) => {
+        if (user.role === 'A') user.role = 'Admin';
+        else if (user.role === 'L') user.role = 'Team Leader';
+        else if (user.role === 'M') user.role = 'Team Member';
+        else if (user.role === 'C') user.role = 'Client';
+        user.icon = showIcon(user.id);
+    })
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -70,13 +85,13 @@ export default function AllUsersTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows
+                        {users
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => {
+                            .map((user) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.userId}>
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={user.id}>
                                         {columns.map((column) => {
-                                            const value = row[column.id];
+                                            const value = user[column.id];
                                             return (
                                                 <TableCell key={column.id} align={column.align}>
                                                     {value}
@@ -92,7 +107,7 @@ export default function AllUsersTable() {
             <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={rows.length}
+                count={users.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

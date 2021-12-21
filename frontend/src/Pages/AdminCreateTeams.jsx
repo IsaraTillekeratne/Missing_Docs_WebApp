@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,12 +7,16 @@ import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
 import CreateTeamForm from '../components/CreateTeamForm';
 import AllUsersTable from '../components/AllUsersTable';
-import SaveIcon from '@mui/icons-material/Save';
-import Button from '@mui/material/Button';
+// import { useSelector } from 'react-redux';
 
 const drawerWidth = 240;
 
 function AdminCreateTeams(props) {
+
+    // const userRole = useSelector((state) => state.user.value);
+
+
+
     const { window } = props;
     const { mobileOpen, handleDrawerToggle } = SideBarLogic();
     const container = window !== undefined ? () => window().document.body : undefined;
@@ -64,20 +67,11 @@ function AdminCreateTeams(props) {
                 <CreateTeamForm />
                 <h3>All Users</h3>
                 <AllUsersTable />
-                <Button variant="contained" endIcon={<SaveIcon />} sx={{ marginTop: '20px' }}>
-                    Save Changes
-                </Button>
+
             </Box>
         </Box>
     );
 }
 
-AdminCreateTeams.propTypes = {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
-};
 
 export default AdminCreateTeams;
