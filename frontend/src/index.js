@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom';
 import App from "./components/App";
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import userReducer from './features/user'
+import leaderReducer from './features/leader';
+import membersReducer from './features/members'
 
 const store = configureStore({
     reducer: {
-        user: userReducer
+        leader: leaderReducer,
+        members: membersReducer,
     },
 })
 

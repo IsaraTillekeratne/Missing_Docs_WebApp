@@ -31,7 +31,7 @@ export default function AllUsersTable() {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/Admin/allUsers", {
+        Axios.get(`${process.env.REACT_APP_SERVER}/Admin/allUsers`, {
             headers: {
                 "x-access-token": localStorage.getItem("token")
             }

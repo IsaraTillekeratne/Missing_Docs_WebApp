@@ -14,7 +14,7 @@ Router.get("/allUsers", validateToken, adminRole, (req, res) => {
     })
 });
 
-// change a user role
+// change a user role -> incomplete
 Router.put("/changeRole", validateToken, adminRole, (req, res) => {
     const role = req.body.userRole;
     const id = req.body.userId;
@@ -24,6 +24,44 @@ Router.put("/changeRole", validateToken, adminRole, (req, res) => {
             res.send('User role updated');
         }
     })
+});
+
+// get leader id, name, email
+Router.get("/leaders", validateToken, adminRole, (req, res) => {
+    db.query("SELECT id,name,email FROM user where role = 'L'", (err, result) => {
+        if (err) res.send({ error: err })
+        else {
+            res.send(result);
+        }
+    })
+});
+
+// get unassigned member id, name, email
+Router.get("/unassignedMembers", validateToken, adminRole, (req, res) => {
+    db.query("SELECT id,name,email FROM user where role = 'M' AND leader_id is NULL", (err, result) => {
+        if (err) res.send({ error: err })
+        else {
+            res.send(result);
+        }
+    })
+});
+
+// create a team
+Router.put("/createTeam", validateToken, adminRole, (req, res) => {
+    const leaderId = req.body.leaderId;
+    const members = req.body.members;
+    db.query("UPDATE user SET leader_id = ? WHERE id = ?", [leaderId, leaderId], (err, result) => {
+        if (err) res.send({ error: err })
+        else {
+            members.map((member) => {
+                db.query("UPDATE user SET leader_id = ? WHERE id = ?", [leaderId, member], (err, result) => {
+                    if (err) res.send({ error: err })
+                })
+            })
+            res.send('Team Created!')
+        }
+    })
+
 })
 
 module.exports = Router;
