@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,37 +8,78 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import IconButton from '@mui/material/IconButton';
+import TeamMembersList from './TeamMembersList';
+import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const columns = [
-    { id: 'number', label: 'Number', minWidth: 170 },
-    { id: 'leaderName', label: 'Leader Name', minWidth: 100 },
-    { id: 'leaderEmail', label: 'Leader Email', minWidth: 170, align: 'right', },
+    { id: 'id', label: 'Number', minWidth: 170 },
+    { id: 'name', label: 'Leader Name', minWidth: 100 },
+    { id: 'email', label: 'Leader Email', minWidth: 170, align: 'right', },
     { id: 'members', label: 'Team Members', minWidth: 170, align: 'right', },
-    { id: 'delete', label: 'Delete Team', minWidth: 170, align: 'right', },
+    { id: 'icon', label: 'Delete Team', minWidth: 170, align: 'right', },
 ];
 
+const showIcon = (leaderId) => {
 
-const rows = [
-    { number: '1', leaderName: 'IN', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '2', leaderName: 'CN', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '3', leaderName: 'IT', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '4', leaderName: 'US', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '5', leaderName: 'CA', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '6', leaderName: 'AU', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '7', leaderName: 'DE', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '8', leaderName: 'IE', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '9', leaderName: 'MX', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '10', leaderName: 'JP', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '11', leaderName: 'FR', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '12', leaderName: 'GB', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '13', leaderName: 'RU', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '14', leaderName: 'NG', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-    { number: '15', leaderName: 'BR', leaderEmail: 'isara@gmail.com', members: 'dummy data', delete: <DeleteRoundedIcon /> },
-];
+
+
+    const deleteTeam = () => {
+        Axios.put(`${process.env.REACT_APP_SERVER}/Admin/deleteTeam`, {
+            leaderId: leaderId
+        }, {
+            headers: {
+                "x-access-token": localStorage.getItem("token")
+            }
+        })
+            .then((response) => {
+                if (response.data.error) {
+                    alert(response.data.error);
+
+                } else {
+                    alert(response.data);
+                    window.location.reload(true);
+                }
+            })
+    }
+    return (<IconButton onClick={deleteTeam}><DeleteRoundedIcon /></IconButton>);
+}
+
+const showMembersList = (leaderId) => {
+    return (<TeamMembersList teamNumber={leaderId} />);
+}
 
 export default function StickyHeadTable() {
+    let navigate = useNavigate();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    let [leaders, setLeaders] = React.useState([]);
+
+    useEffect(() => {
+        Axios.get(`${process.env.REACT_APP_SERVER}/Admin/leaders`, {
+            headers: {
+                "x-access-token": localStorage.getItem("token")
+            }
+        })
+            .then((response) => {
+                if (response.data.error) {
+                    console.log(response)
+                    alert(response.data.error);
+                    // redirection didnt work
+                    if ((response.data.auth) && (response.data.auth === false)) {
+                        navigate('/Signin');
+                    }
+                } else {
+                    setLeaders(response.data);
+                }
+            })
+    }, []);
+
+    leaders.map((leader) => {
+        leader.members = showMembersList(leader.id);
+        leader.icon = showIcon(leader.id);
+    })
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -67,13 +108,13 @@ export default function StickyHeadTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows
+                        {leaders
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => {
+                            .map((leader) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.number} >
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={leader.id} >
                                         {columns.map((column) => {
-                                            const value = row[column.id];
+                                            const value = leader[column.id];
                                             return (
                                                 <TableCell key={column.id} align={column.align}>
                                                     {value}
@@ -89,7 +130,7 @@ export default function StickyHeadTable() {
             <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={rows.length}
+                count={leaders.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

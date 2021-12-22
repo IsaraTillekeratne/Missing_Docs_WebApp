@@ -46,6 +46,17 @@ Router.get("/unassignedMembers", validateToken, adminRole, (req, res) => {
     })
 });
 
+// get members  id, name, email (who has a team)
+Router.get("/assignedMembers", validateToken, adminRole, (req, res) => {
+    const leaderId = req.query.leaderId;
+    db.query("SELECT id,name,email FROM user where role = 'M' AND leader_id = ?", leaderId, (err, result) => {
+        if (err) res.send({ error: err })
+        else {
+            res.send(result);
+        }
+    })
+});
+
 // create a team
 Router.put("/createTeam", validateToken, adminRole, (req, res) => {
     const leaderId = req.body.leaderId;
@@ -62,6 +73,15 @@ Router.put("/createTeam", validateToken, adminRole, (req, res) => {
         }
     })
 
+})
+
+// delete a team
+Router.put("/deleteTeam", validateToken, adminRole, (req, res) => {
+    const leaderId = req.body.leaderId;
+    db.query("UPDATE user SET leader_id = NULL WHERE leader_id = ?", leaderId, (err, result) => {
+        if (err) res.send({ error: err })
+        else res.send("Team Deleted!");
+    })
 })
 
 module.exports = Router;

@@ -68,6 +68,7 @@ export default function CreateTeamForm() {
                         }
                     } else {
                         alert(response.data);
+                        window.location.reload(true);
                     }
                 })
         }
