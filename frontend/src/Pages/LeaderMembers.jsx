@@ -6,9 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
-import SaveIcon from '@mui/icons-material/Save';
 import MembersTable from '../components/MembersTable';
-import Button from '@mui/material/Button';
 
 const drawerWidth = 240;
 
@@ -61,9 +59,6 @@ function LeaderMembers(props) {
             >
                 <Toolbar />
                 <MembersTable />
-                <Button variant="contained" endIcon={<SaveIcon />} sx={{ marginTop: '20px' }}>
-                    Save Changes
-                </Button>
             </Box>
 
         </Box>

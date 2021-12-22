@@ -8,6 +8,7 @@ const SignupRoute = require("./Routes/Signup");
 const SigninRoute = require("./Routes/Signin");
 const UserRolesRoute = require("./Routes/UserRoles");
 const AdminRoute = require("./Routes/Admin");
+const LeaderRoute = require("./Routes/Leader");
 
 app.use(express.json());
 
@@ -24,6 +25,7 @@ app.use("/Signup", SignupRoute);
 app.use("/Signin", SigninRoute);
 app.use("/UserRoles", UserRolesRoute);
 app.use("/Admin", AdminRoute);
+app.use("/Leader", LeaderRoute);
 
 app.listen(3001, function () {
     console.log('server running');

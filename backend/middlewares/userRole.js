@@ -6,4 +6,12 @@ const adminRole = (req, res, next) => {
     }
 }
 
-module.exports = { adminRole };
+const leaderRole = (req, res, next) => {
+    if (req.userRole === 'L') {
+        return next();
+    } else {
+        return res.send({ error: 'No team leader privileges', auth: false });
+    }
+}
+
+module.exports = { adminRole, leaderRole };

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,40 +8,27 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import ClientListDropDown from './ClientListDropDown';
+import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const columns = [
-    { id: 'memberId', label: 'Member Id', minWidth: 170 },
+    { id: 'id', label: 'Member Id', minWidth: 170 },
     { id: 'name', label: 'Member Name', minWidth: 100 },
     { id: 'email', label: 'Member Email', minWidth: 170, align: 'right', },
     { id: 'icon', label: 'Add Clients', minWidth: 170, align: 'right', },
 ];
 
-const showIcon = () => {
+const showIcon = (memberId) => {
 
-    return (<ClientListDropDown />);
+    return (<ClientListDropDown memberId={memberId} />);
 }
 
-const rows = [
-    { memberId: '1', name: 'IN', email: 'isara@gmail.com', icon: showIcon() },
-    { memberId: '2', name: 'CN', email: 'isara@gmail.com', icon: showIcon() },
-    { memberId: '3', name: 'IT', email: 'isara@gmail.com', icon: showIcon() },
-    { memberId: '4', name: 'US', email: 'isara@gmail.com', icon: showIcon() },
-    { memberId: '5', name: 'CA', email: 'isara@gmail.com', icon: showIcon() },
-    { memberId: '6', name: 'AU', email: 'isara@gmail.com', icon: showIcon() },
-    { memberId: '7', name: 'DE', email: 'isara@gmail.com', icon: showIcon() },
-    { memberId: '8', name: 'IE', email: 'isara@gmail.com', icon: showIcon() },
-    { memberId: '9', name: 'MX', email: 'isara@gmail.com', icon: showIcon() },
-    { memberId: '10', name: 'JP', email: 'isara@gmail.com', icon: showIcon() },
-    { memberId: '11', name: 'FR', email: 'isara@gmail.com', icon: showIcon() },
-    { memberId: '12', name: 'GB', email: 'isara@gmail.com', icon: showIcon() },
-    { memberId: '13', name: 'RU', email: 'isara@gmail.com', icon: showIcon() },
-    { memberId: '14', name: 'NG', email: 'isara@gmail.com', icon: showIcon() },
-    { memberId: '15', name: 'BR', email: 'isara@gmail.com', icon: showIcon() },
-];
 
 export default function MembersTable() {
+    let navigate = useNavigate();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    let [members, setMembers] = useState([]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -51,6 +38,30 @@ export default function MembersTable() {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+
+    useEffect(() => {
+        Axios.get(`${process.env.REACT_APP_SERVER}/Leader/members`, {
+            headers: {
+                "x-access-token": localStorage.getItem("token")
+            }
+        })
+            .then((response) => {
+                if (response.data.error) {
+                    console.log(response)
+                    alert(response.data.error);
+                    // redirection didnt work
+                    if ((response.data.auth) && (response.data.auth === false)) {
+                        navigate('/Signin');
+                    }
+                } else {
+                    setMembers(response.data);
+                }
+            })
+    }, []);
+
+    members.map((member) => {
+        member.icon = showIcon(member.id);
+    })
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -70,13 +81,13 @@ export default function MembersTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows
+                        {members
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => {
+                            .map((member) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.memberId}>
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={member.id}>
                                         {columns.map((column) => {
-                                            const value = row[column.id];
+                                            const value = member[column.id];
                                             return (
                                                 <TableCell key={column.id} align={column.align}>
                                                     {value}
@@ -92,7 +103,7 @@ export default function MembersTable() {
             <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={rows.length}
+                count={members.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
