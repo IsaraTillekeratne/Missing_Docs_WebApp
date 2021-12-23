@@ -31,10 +31,10 @@ function App() {
                 <Route path="/AdminDocs" element={<AdminDocs />} />
                 <Route path="/LeaderHome" element={<LeaderHome />} />
                 <Route path="/LeaderClients" element={<LeaderHome />} />
-                <Route path="/LeaderClientRequest" element={<LeaderClientRequest />} />
+                <Route path="/LeaderClientRequest/:clientId" element={<LeaderClientRequest />} />
                 <Route path="/LeaderMembers" element={<LeaderMembers />} />
                 <Route path="/MemberHome" element={<MemberHome />} />
-                <Route path="/MemberClientRequest" element={<MemberClientRequest />} />
+                <Route path="/MemberClientRequest/:clientId" element={<MemberClientRequest />} />
                 <Route path="/ClientHome" element={<ClientHome />} />
                 <Route path="/ClientActual" element={<ClientHome />} />
                 <Route path="/ClientProvided" element={<ClientProvided />} />

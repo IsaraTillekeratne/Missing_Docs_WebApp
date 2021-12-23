@@ -7,10 +7,12 @@ import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
 import RequestsTable from '../components/RequestsTable';
+import { useParams } from 'react-router-dom';
 
 const drawerWidth = 240;
 
 function LeaderClientRequest(props) {
+    let { clientId } = useParams();
     const { window } = props;
     const { mobileOpen, handleDrawerToggle } = SideBarLogic();
     const container = window !== undefined ? () => window().document.body : undefined;
@@ -58,19 +60,13 @@ function LeaderClientRequest(props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <RequestsTable user='L' />
+                <RequestsTable user='L' clientId={clientId} />
 
             </Box>
         </Box>
     );
 }
 
-LeaderClientRequest.propTypes = {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
-};
+
 
 export default LeaderClientRequest;

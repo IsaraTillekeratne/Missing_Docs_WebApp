@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,13 +6,13 @@ import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
 import RequestsTable from '../components/RequestsTable';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
 import TextBox from '../components/TextBox';
+import { useParams } from 'react-router-dom';
 
 const drawerWidth = 240;
 
 function MemberClientRequest(props) {
+    let { clientId } = useParams();
     const { window } = props;
     const { mobileOpen, handleDrawerToggle } = SideBarLogic();
     const container = window !== undefined ? () => window().document.body : undefined;
@@ -61,24 +60,13 @@ function MemberClientRequest(props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <RequestsTable user='M' />
+                <RequestsTable user='M' clientId={clientId} />
                 <h3>Create New Requests</h3>
-                <TextBox />
-                <Fab color="primary" aria-label="add" sx={{ marginTop: '20px' }}>
-                    <AddIcon />
-                </Fab>
-
+                <TextBox clientId={clientId} />
             </Box>
         </Box>
     );
 }
 
-MemberClientRequest.propTypes = {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
-};
 
 export default MemberClientRequest;

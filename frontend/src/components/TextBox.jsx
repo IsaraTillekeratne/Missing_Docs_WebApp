@@ -1,7 +1,9 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 
-export default function TextBox() {
+export default function TextBox(props) {
     const [value, setValue] = React.useState('');
 
     const handleChange = (event) => {
@@ -22,9 +24,9 @@ export default function TextBox() {
         console.log(row);
     }
 
+    console.log(props.clientId)
 
-
-    return (<TextField
+    return (<div><TextField
         id="outlined-multiline-static"
         label="Paste Here"
         multiline
@@ -33,6 +35,10 @@ export default function TextBox() {
         columns={50}
         value={value}
         onChange={handleChange}
-    />);
+    />
+        <Fab color="primary" aria-label="add" sx={{ marginTop: '20px' }}>
+            <AddIcon />
+        </Fab>
+    </div>);
 
 }

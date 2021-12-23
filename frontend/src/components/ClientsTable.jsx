@@ -19,32 +19,7 @@ const columns = [
     { id: 'icon', label: 'Show Requests', minWidth: 170, align: 'right', },
 ];
 
-// should change href for ./MemberClientRequest too
-const showIcon = (clientId) => {
-    return (<IconButton component="a" href='./MemberClientRequest'>
-        <ArrowForwardIosRoundedIcon />
-    </IconButton>);
-}
-
-const rows = [
-    { clientId: '1', name: 'IN', email: 'isara@gmail.com', icon: showIcon() },
-    { clientId: '2', name: 'CN', email: 'isara@gmail.com', icon: showIcon() },
-    { clientId: '3', name: 'IT', email: 'isara@gmail.com', icon: showIcon() },
-    { clientId: '4', name: 'US', email: 'isara@gmail.com', icon: showIcon() },
-    { clientId: '5', name: 'CA', email: 'isara@gmail.com', icon: showIcon() },
-    { clientId: '6', name: 'AU', email: 'isara@gmail.com', icon: showIcon() },
-    { clientId: '7', name: 'DE', email: 'isara@gmail.com', icon: showIcon() },
-    { clientId: '8', name: 'IE', email: 'isara@gmail.com', icon: showIcon() },
-    { clientId: '9', name: 'MX', email: 'isara@gmail.com', icon: showIcon() },
-    { clientId: '10', name: 'JP', email: 'isara@gmail.com', icon: showIcon() },
-    { clientId: '11', name: 'FR', email: 'isara@gmail.com', icon: showIcon() },
-    { clientId: '12', name: 'GB', email: 'isara@gmail.com', icon: showIcon() },
-    { clientId: '13', name: 'RU', email: 'isara@gmail.com', icon: showIcon() },
-    { clientId: '14', name: 'NG', email: 'isara@gmail.com', icon: showIcon() },
-    { clientId: '15', name: 'BR', email: 'isara@gmail.com', icon: showIcon() },
-];
-
-export default function ClientsTable() {
+export default function ClientsTable(props) {
     let navigate = useNavigate();
     let [clients, setClients] = useState([]);
     const [page, setPage] = React.useState(0);
@@ -59,8 +34,22 @@ export default function ClientsTable() {
         setPage(0);
     };
 
+    const showIcon = (clientId) => {
+        let nextPage = '';
+        if (props.user === 'M') nextPage = `./MemberClientRequest/${clientId}`;
+        else if (props.user === 'L') nextPage = `./LeaderClientRequest/${clientId}`;
+        return (<IconButton component="a" href={nextPage}>
+            <ArrowForwardIosRoundedIcon />
+        </IconButton>);
+    }
+
+    let request = '';
+
+    if (props.user === 'L') request = `${process.env.REACT_APP_SERVER}/Leader/assignedClients`;
+    else if (props.user === 'M') request = `${process.env.REACT_APP_SERVER}/Member/clients`;
+
     useEffect(() => {
-        Axios.get(`${process.env.REACT_APP_SERVER}/Leader/assignedClients`, {
+        Axios.get(request, {
             headers: {
                 "x-access-token": localStorage.getItem("token")
             }
