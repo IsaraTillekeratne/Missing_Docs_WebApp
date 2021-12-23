@@ -8,7 +8,7 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import SaveIcon from '@mui/icons-material/Save';
+import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,19 +22,6 @@ const MenuProps = {
         },
     },
 };
-
-const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder',
-];
 
 export default function ClientListDropDown(props) {
     let navigate = useNavigate();
@@ -73,26 +60,31 @@ export default function ClientListDropDown(props) {
 
     const addClients = () => {
 
-        Axios.post(`${process.env.REACT_APP_SERVER}/Leader/assignClients`, {
-            memberId: props.memberId,
-            clients: selectedClients,
-        }, {
-            headers: {
-                "x-access-token": localStorage.getItem("token")
-            }
-        })
-            .then((response) => {
-                if (response.data.error) {
-                    alert(response.data.error);
-                    if ((response.data.auth) && (response.data.auth === false)) {
-                        navigate('/Signin');
-                    }
-                } else {
-                    // console.log(response.data);
-                    alert(response.data);
-                    window.location.reload(true);
+        if (selectedClients.length === 0) alert("Please select clients");
+        else {
+            Axios.post(`${process.env.REACT_APP_SERVER}/Leader/assignClients`, {
+                memberId: props.memberId,
+                clients: selectedClients,
+            }, {
+                headers: {
+                    "x-access-token": localStorage.getItem("token")
                 }
             })
+                .then((response) => {
+                    if (response.data.error) {
+                        alert(response.data.error);
+                        if ((response.data.auth) && (response.data.auth === false)) {
+                            navigate('/Signin');
+                        }
+                    } else {
+                        // console.log(response.data);
+                        alert(response.data);
+                        window.location.reload(true);
+                    }
+                })
+        }
+
+
     }
 
     return (
@@ -122,7 +114,7 @@ export default function ClientListDropDown(props) {
                     </FormControl>
                 </Grid>
                 <Grid item xs={2}>
-                    <IconButton onClick={addClients}><SaveIcon /></IconButton>
+                    <IconButton onClick={addClients}><AddCircleOutlineRoundedIcon /></IconButton>
                 </Grid>
             </Grid>
         </div >

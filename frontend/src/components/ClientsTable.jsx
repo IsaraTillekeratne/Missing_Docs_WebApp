@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,16 +9,18 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import IconButton from '@mui/material/IconButton';
+import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const columns = [
-    { id: 'clientId', label: 'Client Id', minWidth: 100 },
+    { id: 'id', label: 'Client Id', minWidth: 100 },
     { id: 'name', label: 'Client Name', minWidth: 100 },
     { id: 'email', label: 'Client Email', minWidth: 170, align: 'right', },
     { id: 'icon', label: 'Show Requests', minWidth: 170, align: 'right', },
 ];
 
 // should change href for ./MemberClientRequest too
-const showIcon = () => {
+const showIcon = (clientId) => {
     return (<IconButton component="a" href='./MemberClientRequest'>
         <ArrowForwardIosRoundedIcon />
     </IconButton>);
@@ -43,6 +45,8 @@ const rows = [
 ];
 
 export default function ClientsTable() {
+    let navigate = useNavigate();
+    let [clients, setClients] = useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -54,6 +58,31 @@ export default function ClientsTable() {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+
+    useEffect(() => {
+        Axios.get(`${process.env.REACT_APP_SERVER}/Leader/assignedClients`, {
+            headers: {
+                "x-access-token": localStorage.getItem("token")
+            }
+        })
+            .then((response) => {
+                if (response.data.error) {
+                    console.log(response)
+                    alert(response.data.error);
+                    // redirection didnt work
+                    if ((response.data.auth) && (response.data.auth === false)) {
+                        navigate('/Signin');
+                    }
+                } else {
+                    setClients(response.data);
+                }
+            })
+    }, []);
+
+    clients.map((client) => {
+        client.icon = showIcon(client.id);
+    })
+
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -73,13 +102,13 @@ export default function ClientsTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows
+                        {clients
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => {
+                            .map((client) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.clientId}>
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={client.id}>
                                         {columns.map((column) => {
-                                            const value = row[column.id];
+                                            const value = client[column.id];
                                             return (
                                                 <TableCell key={column.id} align={column.align}>
                                                     {value}
@@ -95,7 +124,7 @@ export default function ClientsTable() {
             <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={rows.length}
+                count={clients.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
