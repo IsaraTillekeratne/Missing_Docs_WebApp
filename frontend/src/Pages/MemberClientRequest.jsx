@@ -5,7 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
-import RequestsTable from '../components/RequestsTable';
+import MemberRequestsTable from '../components/MemberRequestsTable';
 import TextBox from '../components/TextBox';
 import { useParams } from 'react-router-dom';
 
@@ -60,7 +60,7 @@ function MemberClientRequest(props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <RequestsTable user='M' clientId={clientId} />
+                <MemberRequestsTable user='M' clientId={clientId} />
                 <h3>Create New Requests</h3>
                 <TextBox clientId={clientId} />
             </Box>

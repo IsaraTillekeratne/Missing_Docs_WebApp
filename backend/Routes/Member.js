@@ -23,6 +23,8 @@ Router.post("/sendRequests", validateToken, memberRole, (req, res) => {
     const requests = req.body.requests;
     const placed_date = ((new Date(Date.now()).toLocaleString()).split(','))[0];
 
+    // if possible - check if this client belongs to this member
+
     // upload to requests table
     requests.map((request) => {
         db.query("INSERT INTO request (doc_date,amount,partner,comments,placed_date,member_id) VALUES (?,?,?,?,?,?)",
@@ -40,8 +42,58 @@ Router.post("/sendRequests", validateToken, memberRole, (req, res) => {
     })
 
     res.send("Requests sent successfully!");
-
 })
 
+// get requests (sent only by this member) of one of this member's client
+Router.get("/requests", validateToken, memberRole, (req, res) => {
+    const clientId = req.query.clientId;
+    const memberId = req.userId;
+
+    // find requestids for the given pair of member-client
+    db.query("SELECT requestid,document FROM sent WHERE clientid = ? AND memberid = ?", [clientId, memberId], (err, results) => {
+        if (err) res.sendStatus(400);
+        else {
+            // null requestid's tika ain karala inna array eken
+            let nullIdIndexes = [];
+            for (let i = 0; i < results.length; i++) {
+                if (results[i].requestid === null) nullIdIndexes.push(i);
+            }
+            console.log(results);
+            console.log(results.length)
+            nullIdIndexes.map((index) => {
+                results.splice(index, 1);
+            })
+            console.log(results);
+            console.log(results.length)
+            var reqs = []
+            for (let i = 0; i < results.length; i++) {
+                db.query("SELECT doc_date,amount,partner,comments FROM request WHERE id = ?", results[i].requestid, (err, result) => {
+                    if (err) res.sendStatus(400);
+                    else {
+                        results[i].doc_date = result[0].doc_date;
+                        results[i].amount = result[0].amount;
+                        results[i].partner = result[0].partner;
+                        results[i].comments = result[0].comments;
+                        reqs.push(results[i]);
+
+                    }
+                    if (i === results.length - 1) res.send(reqs);
+                })
+
+            }
+
+        }
+    })
+})
+
+// delete a request ////////////FIX ERROR -> sent table eken request eka delete wenne na
+Router.delete("/deleteRequest", validateToken, memberRole, (req, res) => {
+    const reqId = req.query.requestId;
+    db.query("DELETE FROM request WHERE id = ? AND member_id = ?", [reqId, req.userId], (err, result) => {
+        if (err) res.sendStatus(400);
+        else res.send("Successfully deleted!")
+        // note if a diff mem tries to delete although it shows succesful msg, the request won't be deleted
+    })
+})
 
 module.exports = Router;
