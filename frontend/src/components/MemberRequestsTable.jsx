@@ -10,6 +10,8 @@ import TableRow from '@mui/material/TableRow';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -29,7 +31,10 @@ export default function MemberRequestsTable(props) {
     let navigate = useNavigate();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [clickEdit, setClickEdit] = useState(false);
     const [reqs, setReqs] = useState([]);
+    const [editReqId, setEditReqId] = useState(null);
+    const [editReqIndex, setEditReqIndex] = useState(null);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -40,12 +45,27 @@ export default function MemberRequestsTable(props) {
         setPage(0);
     };
 
+    const handleSave = () => {
+        if (clickEdit) {
+            console.log(reqs[editReqIndex]);
+            // SEND THE AXIOS REQUEST TO UPDATE REQUEST
+        };
+    }
+
     let client_id = props.clientId;
 
     const showIconEdit = (requestId) => {
-        return (<IconButton>
-            <EditRoundedIcon />
-        </IconButton>);
+        return (<div>
+            <IconButton onClick={() => {
+                setClickEdit(true);
+                setEditReqId(requestId);
+            }}>
+                <EditRoundedIcon />
+            </IconButton>
+            <IconButton onClick={handleSave}>
+                <SaveRoundedIcon />
+            </IconButton>
+        </div>);
     }
     const showIconDel = (requestId) => {
 
@@ -123,14 +143,19 @@ export default function MemberRequestsTable(props) {
                     <TableBody>
                         {reqs
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((req) => {
+                            .map((req, i) => {
                                 return (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={req.requestid}>
-                                        {columns.map((column) => {
+                                        {columns.map((column, index) => {
                                             const value = req[column.id];
                                             return (
                                                 <TableCell key={column.id} align={column.align}>
-                                                    {value}
+                                                    {req.requestid === editReqId && index < 4 ?
+                                                        <TextField placeholder={value} onChange={(e) => {
+                                                            setEditReqIndex(i);
+                                                            req[column.id] = e.target.value;
+                                                        }}></TextField>
+                                                        : value}
                                                 </TableCell>
                                             );
                                         })}
