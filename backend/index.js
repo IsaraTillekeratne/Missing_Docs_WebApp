@@ -3,6 +3,7 @@ const app = express();
 const db = require("./connection")
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 
 const SignupRoute = require("./Routes/Signup");
 const SigninRoute = require("./Routes/Signin");
@@ -13,6 +14,7 @@ const MemberRoute = require("./Routes/Member");
 const ClientRoute = require("./Routes/Client");
 
 app.use(express.json());
+app.use(fileUpload());
 
 app.use(cors({
     origin: ["http://localhost:3000"],

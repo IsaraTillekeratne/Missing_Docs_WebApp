@@ -13,25 +13,12 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const showIconUpload = () => {
-    return (<IconButton>
-        <FileUploadRoundedIcon />
-    </IconButton>);
-}
-
-const showIconMark = () => {
-    return (<IconButton>
-        <CheckCircleRoundedIcon />
-    </IconButton>);
-}
-
 const columns = [
     { id: 'doc_date', label: 'Document Date', minWidth: 120 },
     { id: 'amount', label: 'Amount', minWidth: 150 },
     { id: 'partner', label: 'Partner', minWidth: 100, align: 'left', },
     { id: 'comments', label: 'Comments', minWidth: 200, align: 'left', },
-    { id: 'document', label: 'Document', minWidth: 120, align: 'right', },
-    { id: 'received', label: 'Mark Received', minWidth: 120, align: 'right', },
+    { id: 'received', label: 'Received', minWidth: 120, align: 'right', },
     { id: 'upload', label: 'Upload', minWidth: 150, align: 'right', },
 ];
 
@@ -40,6 +27,8 @@ export default function ActualRequestsTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [reqs, setReqs] = useState([]);
+    const [file, setFile] = useState(null);
+    const [fileUploadReqId, setFileUploadReqId] = useState(null);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -50,11 +39,85 @@ export default function ActualRequestsTable() {
         setPage(0);
     };
 
+    const showIconUpload = (requestid) => {
 
+        const selectFile = (e) => {
+            setFile(e.target.files[0]);
+            setFileUploadReqId(requestid);
+        }
+        const submitFile = (e) => {
+            // console.log(fileUploadReqId);
+            // console.log(file);
+            const formData = new FormData();
+            formData.append('file', file);
+
+            Axios.post(`${process.env.REACT_APP_SERVER}/Client/uploadFile?reqId=${fileUploadReqId}`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "x-access-token": localStorage.getItem("token")
+                }
+            })
+                .then((response) => {
+                    if (response.data.error) {
+                        console.log(response)
+                        alert(response.data.error);
+                        // redirection didnt work
+                        if ((response.data.auth) && (response.data.auth === false)) {
+                            navigate('/Signin');
+                        }
+                    } else if (response.status === 400) {
+                        alert("Error 400 Bad Request!")
+                    }
+                    else {
+                        setReqs(response.data);
+                    }
+                })
+        }
+        return (<div>
+            <input type="file" onChange={selectFile} ></input>
+            <IconButton size="small" onClick={submitFile}>
+                <FileUploadRoundedIcon />
+            </IconButton>
+        </div>);
+    }
+
+    const showIconMark = (requestid) => {
+        return (<IconButton title="Click to mark as provided">
+            <CheckCircleRoundedIcon />
+        </IconButton>);
+    }
+
+    useEffect(() => {
+        Axios.get(`${process.env.REACT_APP_SERVER}/Client/requests`, {
+            headers: {
+                "x-access-token": localStorage.getItem("token")
+            }
+        })
+            .then((response) => {
+                if (response.data.error) {
+                    console.log(response)
+                    alert(response.data.error);
+                    // redirection didnt work
+                    if ((response.data.auth) && (response.data.auth === false)) {
+                        navigate('/Signin');
+                    }
+                } else if (response.status === 400) {
+                    alert("Error 400 Bad Request!")
+                }
+                else {
+                    setReqs(response.data);
+                }
+            })
+    }, []);
+
+    reqs.map((req) => {
+        req.received = showIconMark(req.requestid)
+        req.upload = showIconUpload(req.requestid);
+    })
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
+            <TableContainer sx={{ maxHeight: 520 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
@@ -70,13 +133,13 @@ export default function ActualRequestsTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows
+                        {reqs
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => {
+                            .map((req) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.requestId}>
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={req.requestid}>
                                         {columns.map((column) => {
-                                            const value = row[column.id];
+                                            const value = req[column.id];
                                             return (
                                                 <TableCell key={column.id} align={column.align}>
                                                     {value}
@@ -92,7 +155,7 @@ export default function ActualRequestsTable() {
             <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={rows.length}
+                count={reqs.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

@@ -19,6 +19,7 @@ const validateToken = (req, res, next) => {
     const token = req.headers["x-access-token"]
     if (!token) {
         res.send({ error: "User not authenticated!", auth: false });
+        //res.sendStatus(401);
     }
     else {
         try {
@@ -31,6 +32,7 @@ const validateToken = (req, res, next) => {
         }
         catch (err) {
             res.json({ auth: false, error: 'Invalid Token' })
+            //res.sendStatus(401);
         }
 
     }

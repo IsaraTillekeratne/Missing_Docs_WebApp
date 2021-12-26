@@ -65,8 +65,8 @@ export default function MemberRequestsTable(props) {
             })
                 .then((response) => {
                     if (response.data.error) {
-
                         alert(response.data.error);
+                        navigate('/Signin');
 
                     } else if (response.status === 400) {
                         alert("Error 400 Bad Request!")
@@ -75,6 +75,8 @@ export default function MemberRequestsTable(props) {
                         alert(response.data);
                         window.location.reload(true);
                     }
+                }).catch((err) => {
+                    alert("Bad Request!");
                 })
 
         };
@@ -108,8 +110,9 @@ export default function MemberRequestsTable(props) {
 
                         alert(response.data.error);
 
-                    } else if (response.status === 400) {
-                        alert("Error 400 Bad Request!")
+
+                    } else if (response.status === 401) {
+                        alert("Authorisation Failed!")
                     }
                     else {
                         alert(response.data);
@@ -143,6 +146,8 @@ export default function MemberRequestsTable(props) {
                 else {
                     setReqs(response.data);
                 }
+            }).catch((err) => {
+                alert("Bad Request!");
             })
     }, []);
 
@@ -153,7 +158,7 @@ export default function MemberRequestsTable(props) {
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
+            <TableContainer sx={{ maxHeight: 520 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>

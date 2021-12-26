@@ -23,4 +23,14 @@ Router.get("/requests", validateToken, clientRole, (req, res) => {
     })
 })
 
+Router.post("/uploadFile", validateToken, clientRole, (req, res) => {
+    const reqId = req.query.reqId;
+    if (!req.files || Object.keys(req.files).length === 0) {
+        res.sendStatus(400);
+    } else {
+        const file = req.files.file;
+        console.log(file);
+    }
+})
+
 module.exports = Router;
