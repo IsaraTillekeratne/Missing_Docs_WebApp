@@ -86,7 +86,7 @@ Router.get("/requests", validateToken, memberRole, (req, res) => {
     })
 })
 
-// delete a request ////////////FIX ERROR -> sent table eken request eka delete wenne na
+// delete a request -> sent table eken request eka delete wenne na
 Router.delete("/deleteRequest", validateToken, memberRole, (req, res) => {
     const reqId = req.query.requestId;
     db.query("DELETE FROM request WHERE id = ? AND member_id = ?", [reqId, req.userId], (err, result) => {
@@ -94,6 +94,21 @@ Router.delete("/deleteRequest", validateToken, memberRole, (req, res) => {
         else res.send("Successfully deleted!")
         // note if a diff mem tries to delete although it shows succesful msg, the request won't be deleted
     })
+})
+
+// edit request details
+Router.put("/editRequest", validateToken, memberRole, (req, res) => {
+    const reqId = req.body.reqId;
+    const doc_date = req.body.doc_date;
+    const amount = req.body.amount;
+    const partner = req.body.partner;
+    const comments = req.body.comments;
+    const memberId = req.userId;
+    db.query("UPDATE request SET doc_date = ?, amount = ?, partner = ?, comments = ? WHERE member_id = ? AND id = ?",
+        [doc_date, amount, partner, comments, memberId, reqId], (err, result) => {
+            if (err) res.sendStatus(400);
+            else res.send("Successfully updated");
+        })
 })
 
 module.exports = Router;

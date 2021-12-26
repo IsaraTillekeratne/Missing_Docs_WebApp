@@ -46,9 +46,37 @@ export default function MemberRequestsTable(props) {
     };
 
     const handleSave = () => {
-        if (clickEdit) {
-            console.log(reqs[editReqIndex]);
-            // SEND THE AXIOS REQUEST TO UPDATE REQUEST
+        if (clickEdit && editReqIndex != null) {
+            //console.log(reqs[editReqIndex]);
+            let doc_date = reqs[editReqIndex].doc_date;
+            let amount = reqs[editReqIndex].amount;
+            let partner = reqs[editReqIndex].partner;
+            let comments = reqs[editReqIndex].comments;
+            Axios.put(`${process.env.REACT_APP_SERVER}/Member/editRequest`, {
+                reqId: editReqId,
+                doc_date: doc_date,
+                amount: amount,
+                partner: partner,
+                comments: comments
+            }, {
+                headers: {
+                    "x-access-token": localStorage.getItem("token")
+                }
+            })
+                .then((response) => {
+                    if (response.data.error) {
+
+                        alert(response.data.error);
+
+                    } else if (response.status === 400) {
+                        alert("Error 400 Bad Request!")
+                    }
+                    else {
+                        alert(response.data);
+                        window.location.reload(true);
+                    }
+                })
+
         };
     }
 
