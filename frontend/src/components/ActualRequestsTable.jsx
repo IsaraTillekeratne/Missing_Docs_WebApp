@@ -51,7 +51,7 @@ export default function ActualRequestsTable() {
             const formData = new FormData();
             formData.append('file', file);
 
-            Axios.post(`${process.env.REACT_APP_SERVER}/Client/uploadFile?reqId=${fileUploadReqId}`, formData, {
+            Axios.put(`${process.env.REACT_APP_SERVER}/Client/uploadFile?reqId=${fileUploadReqId}`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     "x-access-token": localStorage.getItem("token")
@@ -69,8 +69,12 @@ export default function ActualRequestsTable() {
                         alert("Error 400 Bad Request!")
                     }
                     else {
-                        setReqs(response.data);
+                        alert(response.data);
+                        window.location.reload(true);
                     }
+                }).catch((err) => {
+                    alert("Bad Request!");
+                    window.location.reload(true);
                 })
         }
         return (<div>

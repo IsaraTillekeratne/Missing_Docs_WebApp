@@ -23,13 +23,29 @@ Router.get("/requests", validateToken, clientRole, (req, res) => {
     })
 })
 
-Router.post("/uploadFile", validateToken, clientRole, (req, res) => {
+Router.put("/uploadFile", validateToken, clientRole, (req, res) => {
     const reqId = req.query.reqId;
     if (!req.files || Object.keys(req.files).length === 0) {
         res.sendStatus(400);
     } else {
         const file = req.files.file;
-        console.log(file);
+        const fileName = 'REQ' + reqId + 'FILE' + file.name;
+        file.mv(`${__dirname}/uploads/${fileName}`, err => {
+            if (err) {
+                console.log(err);
+                res.sendStatus(500)
+            }
+            else {
+                db.query("UPDATE sent SET document = ?, type = 'P' WHERE requestid = ?", [fileName, reqId], (err, result) => {
+                    if (err) {
+                        console.log(err);
+                        res.sendStatus(400);
+                    }
+                    else res.send("Uploaded Successfully!");
+                })
+            }
+        })
+
     }
 })
 
