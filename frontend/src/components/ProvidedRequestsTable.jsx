@@ -7,9 +7,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import IconButton from '@mui/material/IconButton';
-import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import TextField from '@mui/material/TextField';
+import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,17 +20,15 @@ const columns = [
     { id: 'amount', label: 'Amount', minWidth: 150 },
     { id: 'partner', label: 'Partner', minWidth: 100, align: 'left', },
     { id: 'comments', label: 'Comments', minWidth: 200, align: 'left', },
-    { id: 'received', label: 'Received', minWidth: 120, align: 'right', },
-    { id: 'upload', label: 'Upload', minWidth: 150, align: 'right', },
 ];
 
-export default function ActualRequestsTable() {
+
+
+export default function ProvidedRequestsTable(props) {
     let navigate = useNavigate();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [reqs, setReqs] = useState([]);
-    const [file, setFile] = useState(null);
-    const [fileUploadReqId, setFileUploadReqId] = useState(null);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -39,87 +39,8 @@ export default function ActualRequestsTable() {
         setPage(0);
     };
 
-    const showIconUpload = (requestid) => {
-
-        const selectFile = (e) => {
-            setFile(e.target.files[0]);
-            setFileUploadReqId(requestid);
-        }
-        const submitFile = (e) => {
-            // console.log(fileUploadReqId);
-            // console.log(file);
-            const formData = new FormData();
-            formData.append('file', file);
-
-            Axios.put(`${process.env.REACT_APP_SERVER}/Client/uploadFile?reqId=${fileUploadReqId}`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                    "x-access-token": localStorage.getItem("token")
-                }
-            })
-                .then((response) => {
-                    if (response.data.error) {
-                        console.log(response)
-                        alert(response.data.error);
-                        // redirection didnt work
-                        if ((response.data.auth) && (response.data.auth === false)) {
-                            navigate('/Signin');
-                        }
-                    } else if (response.status === 400) {
-                        alert("Error 400 Bad Request!")
-                    }
-                    else {
-                        alert(response.data);
-                        window.location.reload(true);
-                    }
-                }).catch((err) => {
-                    alert("Bad Request!");
-                    window.location.reload(true);
-                })
-        }
-        return (<div>
-            <input type="file" onChange={selectFile} ></input>
-            <IconButton size="small" onClick={submitFile}>
-                <FileUploadRoundedIcon />
-            </IconButton>
-        </div>);
-    }
-
-    const showIconMark = (requestid) => {
-        const markProvided = () => {
-            Axios.put(`${process.env.REACT_APP_SERVER}/Client/mark`, {
-                reqId: requestid
-            }, {
-                headers: {
-                    "x-access-token": localStorage.getItem("token")
-                }
-            })
-                .then((response) => {
-                    if (response.data.error) {
-                        alert(response.data.error);
-                        // redirection didnt work
-                        if ((response.data.auth) && (response.data.auth === false)) {
-                            navigate('/Signin');
-                        }
-                    } else if (response.status === 400) {
-                        alert("Error 400 Bad Request!")
-                    }
-                    else {
-                        alert(response.data);
-                        window.location.reload(true);
-                    }
-                }).catch((err) => {
-                    alert("Bad Request!");
-                    window.location.reload(true);
-                })
-        }
-        return (<IconButton title="Click to mark as provided" onClick={markProvided}>
-            <CheckCircleRoundedIcon />
-        </IconButton>);
-    }
-
     useEffect(() => {
-        Axios.get(`${process.env.REACT_APP_SERVER}/Client/requests`, {
+        Axios.get(`${process.env.REACT_APP_SERVER}/Client/requestsProvided`, {
             headers: {
                 "x-access-token": localStorage.getItem("token")
             }
@@ -138,13 +59,12 @@ export default function ActualRequestsTable() {
                 else {
                     setReqs(response.data);
                 }
+            }).catch((err) => {
+                alert("Bad Request!");
             })
     }, []);
 
-    reqs.map((req) => {
-        req.received = showIconMark(req.requestid)
-        req.upload = showIconUpload(req.requestid);
-    })
+
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>

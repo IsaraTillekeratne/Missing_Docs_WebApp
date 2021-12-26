@@ -1,12 +1,11 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
-import RequestsTable from '../components/RequestsTable';
+import ProvidedRequestsTable from '../components/ProvidedRequestsTable';
 
 const drawerWidth = 240;
 
@@ -58,19 +57,11 @@ function ClientProvided(props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <RequestsTable user='CP' />
+                <ProvidedRequestsTable />
 
             </Box>
         </Box>
     );
 }
-
-ClientProvided.propTypes = {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
-};
 
 export default ClientProvided;
