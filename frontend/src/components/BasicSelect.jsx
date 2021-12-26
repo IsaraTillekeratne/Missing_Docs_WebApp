@@ -14,34 +14,35 @@ import { useNavigate } from 'react-router-dom';
 export default function BasicSelect(props) {
     let navigate = useNavigate();
     let [userRole, setUserRole] = React.useState('');
-    // const dispatch = useDispatch();
+    let [isRoleChange, setIsRoleChange] = React.useState(false);
 
     const handleChange = (event) => {
         setUserRole(event.target.value);
-        // dispatch(set(event.target.value));
+        setIsRoleChange(true);
     };
 
     const saveRole = () => {
-
-        Axios.put(`${process.env.REACT_APP_SERVER}/Admin/changeRole`, {
-            userRole: userRole,
-            userId: props.userId,
-        }, {
-            headers: {
-                "x-access-token": localStorage.getItem("token")
-            }
-        })
-            .then((response) => {
-                if (response.data.error) {
-                    alert(response.data.error);
-                    if ((response.data.auth) && (response.data.auth === false)) {
-                        navigate('/Signin');
-                    }
-                } else {
-                    // console.log(response.data);
-                    window.location.reload(true);
+        if (isRoleChange) {
+            Axios.put(`${process.env.REACT_APP_SERVER}/Admin/changeRole`, {
+                userRole: userRole,
+                userId: props.userId,
+            }, {
+                headers: {
+                    "x-access-token": localStorage.getItem("token")
                 }
             })
+                .then((response) => {
+                    if (response.data.error) {
+                        alert(response.data.error);
+                        if ((response.data.auth) && (response.data.auth === false)) {
+                            navigate('/Signin');
+                        }
+                    } else {
+                        // console.log(response.data);
+                        window.location.reload(true);
+                    }
+                })
+        }
     }
 
     return (<div>
