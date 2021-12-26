@@ -26,33 +26,20 @@ const showIconMark = () => {
 }
 
 const columns = [
-    { id: 'requestId', label: 'Request Id', minWidth: 120 },
-    { id: 'docName', label: 'Document Name', minWidth: 150 },
-    { id: 'price', label: 'Price', minWidth: 100, align: 'left', },
+    { id: 'doc_date', label: 'Document Date', minWidth: 120 },
+    { id: 'amount', label: 'Amount', minWidth: 150 },
+    { id: 'partner', label: 'Partner', minWidth: 100, align: 'left', },
     { id: 'comments', label: 'Comments', minWidth: 200, align: 'left', },
-    { id: 'docDate', label: 'Document Date', minWidth: 120, align: 'right', },
-    { id: 'placedDate', label: 'Placed Date', minWidth: 120, align: 'right', },
-    { id: 'memberEmail', label: 'Member Email', minWidth: 150, align: 'right', },
-    { id: 'uploadDoc', label: 'Upload', minWidth: 80, align: 'right', },
-    { id: 'mark', label: '', minWidth: 50, align: 'right', },
-];
-
-
-const rows = [
-    { requestId: '1', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '2', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '3', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '4', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '5', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '6', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '7', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '8', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '9', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
+    { id: 'document', label: 'Document', minWidth: 120, align: 'right', },
+    { id: 'received', label: 'Mark Received', minWidth: 120, align: 'right', },
+    { id: 'upload', label: 'Upload', minWidth: 150, align: 'right', },
 ];
 
 export default function ActualRequestsTable() {
+    let navigate = useNavigate();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [reqs, setReqs] = useState([]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);

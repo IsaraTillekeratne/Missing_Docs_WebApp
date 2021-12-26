@@ -22,4 +22,12 @@ const memberRole = (req, res, next) => {
     }
 }
 
-module.exports = { adminRole, leaderRole, memberRole };
+const clientRole = (req, res, next) => {
+    if (req.userRole === 'C') {
+        return next();
+    } else {
+        return res.send({ error: 'No client privileges', auth: false });
+    }
+}
+
+module.exports = { adminRole, leaderRole, memberRole, clientRole };
