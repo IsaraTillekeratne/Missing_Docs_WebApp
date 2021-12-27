@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,6 +7,7 @@ import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
 import RequestsTable from '../components/RequestsTable';
 import { useParams } from 'react-router-dom';
+import User from '../components/User';
 
 const drawerWidth = 240;
 
@@ -40,8 +40,8 @@ function LeaderClientRequest(props) {
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
 
                     }}
-                >
-                    <SideBar user='L' />
+                ><User />
+
                 </Drawer>
                 <Drawer
                     variant="permanent"
@@ -51,8 +51,8 @@ function LeaderClientRequest(props) {
 
                     }}
                     open
-                >
-                    <SideBar user='L' />
+                ><User />
+
                 </Drawer>
             </Box>
             <Box

@@ -40,7 +40,7 @@ export default function SideBar(props) {
 
     return (
         <div>
-            <User />
+
             <Divider />
             <List>
                 {titles.map((text, index) => (

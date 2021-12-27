@@ -42,7 +42,7 @@ export default function RequestsTable(props) {
     useEffect(() => {
         let endPoint = '';
         if (props.user === 'A') endPoint = `${process.env.REACT_APP_SERVER}/Admin/requests`;
-        else if (props.user === 'L') endPoint = '';
+        else if (props.user === 'L') endPoint = `${process.env.REACT_APP_SERVER}/Leader/requests?clientId=${props.clientId}`;
         Axios.get(endPoint, {
             headers: {
                 "x-access-token": localStorage.getItem("token")
