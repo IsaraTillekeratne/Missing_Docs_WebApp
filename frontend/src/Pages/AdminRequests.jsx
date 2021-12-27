@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
+import RequestsTable from '../components/RequestsTable';
 
 const drawerWidth = 240;
 
@@ -58,9 +58,7 @@ function AdminRequests(props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <Typography paragraph>
-                    Admin Requests Page
-                </Typography>
+                <RequestsTable user='A' />
 
             </Box>
         </Box>

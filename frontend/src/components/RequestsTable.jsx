@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,114 +7,28 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
-import IconButton from '@mui/material/IconButton';
-import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import Button from '@mui/material/Button';
+import FileDownload from 'js-file-download';
+import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const columnsLeader = [
-    { id: 'requestId', label: 'Request Id', minWidth: 120 },
-    { id: 'docName', label: 'Document Name', minWidth: 150 },
-    { id: 'price', label: 'Price', minWidth: 100, align: 'left', },
-    { id: 'comments', label: 'Comments', minWidth: 200, align: 'left', },
-    { id: 'docDate', label: 'Document Date', minWidth: 120, align: 'right', },
-    { id: 'placedDate', label: 'Placed Date', minWidth: 120, align: 'right', },
-    { id: 'memberEmail', label: 'Member Email', minWidth: 150, align: 'right', },
-    { id: 'doc', label: 'Document', minWidth: 100, align: 'right', },
-];
+// this is for admin and leader views
 
-
-const rowsLeader = [
-    { requestId: '1', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
-    { requestId: '2', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
-    { requestId: '3', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
-    { requestId: '4', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
-    { requestId: '5', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
-    { requestId: '6', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
-    { requestId: '7', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
-    { requestId: '8', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
-    { requestId: '9', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy' },
-];
-
-const showIconEdit = () => {
-    return (<IconButton>
-        <EditRoundedIcon />
-    </IconButton>);
-}
-
-const showIconDel = () => {
-    return (<IconButton>
-        <DeleteRoundedIcon />
-    </IconButton>);
-}
-
-const columnsMember = [
-    { id: 'requestId', label: 'Request Id', minWidth: 50 },
-    { id: 'docName', label: 'Document Name', minWidth: 120 },
-    { id: 'price', label: 'Price', minWidth: 100, align: 'left', },
-    { id: 'comments', label: 'Comments', minWidth: 200, align: 'left', },
-    { id: 'docDate', label: 'Document Date', minWidth: 150, align: 'right', },
-    { id: 'placedDate', label: 'Placed Date', minWidth: 150, align: 'right', },
-    { id: 'doc', label: 'Document', minWidth: 150 },
-    { id: 'edit', label: '', minWidth: 50 },
-    { id: 'delete', label: '', minWidth: 50 },
-
-];
-
-
-const rowsMember = [
-    { requestId: '1', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', doc: 'Dummy Doc', edit: showIconEdit(), delete: showIconDel() },
-    { requestId: '2', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', doc: 'Dummy Doc', edit: showIconEdit(), delete: showIconDel() },
-    { requestId: '3', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', doc: 'Dummy Doc', edit: showIconEdit(), delete: showIconDel() },
-    { requestId: '4', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', doc: 'Dummy Doc', edit: showIconEdit(), delete: showIconDel() },
-    { requestId: '5', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', doc: 'Dummy Doc', edit: showIconEdit(), delete: showIconDel() },
-    { requestId: '6', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', doc: 'Dummy Doc', edit: showIconEdit(), delete: showIconDel() },
-    { requestId: '7', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', doc: 'Dummy Doc', edit: showIconEdit(), delete: showIconDel() },
-    { requestId: '8', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', doc: 'Dummy Doc', edit: showIconEdit(), delete: showIconDel() },
-    { requestId: '9', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', doc: 'Dummy Doc', edit: showIconEdit(), delete: showIconDel() },
-];
-
-const showIconUpload = () => {
-    return (<IconButton>
-        <FileUploadRoundedIcon />
-    </IconButton>);
-}
-
-const showIconMark = () => {
-    return (<IconButton>
-        <CheckCircleRoundedIcon />
-    </IconButton>);
-}
-
-const columnsClient = [
-    { id: 'requestId', label: 'Request Id', minWidth: 120 },
-    { id: 'docName', label: 'Document Name', minWidth: 150 },
-    { id: 'price', label: 'Price', minWidth: 100, align: 'left', },
-    { id: 'comments', label: 'Comments', minWidth: 200, align: 'left', },
-    { id: 'docDate', label: 'Document Date', minWidth: 120, align: 'right', },
-    { id: 'placedDate', label: 'Placed Date', minWidth: 120, align: 'right', },
-    { id: 'memberEmail', label: 'Member Email', minWidth: 150, align: 'right', },
-    { id: 'uploadDoc', label: 'Upload', minWidth: 80, align: 'right', },
-    { id: 'mark', label: '', minWidth: 50, align: 'right', },
-];
-
-
-const rowsClient = [
-    { requestId: '1', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '2', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '3', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '4', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '5', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '6', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '7', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '8', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
-    { requestId: '9', docName: 'IN', price: '1200.00', comments: 'Upload soon', docDate: '2021/12/03', placedDate: '2021/07/12', memberEmail: 'isara@gmail.com', doc: 'Dummy', uploadDoc: showIconUpload(), mark: showIconMark() },
+const columns = [
+    { id: 'doc_date', label: 'Document Date', minWidth: 120 },
+    { id: 'placed_date', label: 'Placed Date', minWidth: 120, align: 'left', },
+    { id: 'amount', label: 'Amount', minWidth: 120, align: 'left', },
+    { id: 'partner', label: 'Partner', minWidth: 100, align: 'left', },
+    { id: 'comments', label: 'Comments', minWidth: 150, align: 'left', },
+    { id: 'document', label: 'Document', minWidth: 150, align: 'right', },
 ];
 
 export default function RequestsTable(props) {
+    let navigate = useNavigate();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [reqs, setReqs] = useState([]);
+    const [doc, setDoc] = useState(null);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -125,24 +39,96 @@ export default function RequestsTable(props) {
         setPage(0);
     };
 
-    let columns = [];
-    let rows = [];
+    useEffect(() => {
+        let endPoint = '';
+        if (props.user === 'A') endPoint = `${process.env.REACT_APP_SERVER}/Admin/requests`;
+        else if (props.user === 'L') endPoint = '';
+        Axios.get(endPoint, {
+            headers: {
+                "x-access-token": localStorage.getItem("token")
+            }
+        })
+            .then((response) => {
+                if (response.data.error) {
+                    console.log(response)
+                    alert(response.data.error);
+                    // redirection didnt work
+                    if ((response.data.auth) && (response.data.auth === false)) {
+                        navigate('/Signin');
+                    }
+                } else if (response.status === 400) {
+                    alert("Error 400 Bad Request!")
+                }
+                else {
+                    setReqs(response.data);
+                }
+            }).catch((err) => {
+                alert("Bad Request!");
+            })
+    }, []);
 
-    // CP means Client but provided tab
-    if (props.user === 'L' || props.user === 'CP') {
-        columns = columnsLeader;
-        rows = rowsLeader
-    } else if (props.user === 'M') {
-        columns = columnsMember;
-        rows = rowsMember;
-    } else if (props.user === 'C') {
-        columns = columnsClient;
-        rows = rowsClient;
+    const showDownload = (id) => {
+        const getDocument = () => {
+            let docEndPoint = '';
+            if (props.user === 'A') docEndPoint = `${process.env.REACT_APP_SERVER}/Admin/document?reqId=${id}`;
+            else if (props.user === 'L') docEndPoint = "";
+            Axios.get(docEndPoint, {
+                headers: {
+                    "x-access-token": localStorage.getItem("token")
+                }
+            })
+                .then((response) => {
+                    if (response.data.error) {
+                        console.log(response)
+                        alert(response.data.error);
+                        // redirection didnt work
+                        if ((response.data.auth) && (response.data.auth === false)) {
+                            navigate('/Signin');
+                        }
+                    } else if (response.status === 400) {
+                        alert("Error 400 Bad Request!")
+                    }
+                    else {
+
+                        if (response.data[0].document === null) alert("File is not provided yet!")
+                        else {
+                            let fileName = response.data[0].document;
+                            let url = "";
+                            if (props.user === 'A') url = `${process.env.REACT_APP_SERVER}/Admin/download?fileName=${fileName}`;
+                            else if (props.user === 'L') url = "";
+                            Axios({
+                                url: url,
+                                method: "GET",
+                                responseType: "blob",
+                                headers: {
+                                    "x-access-token": localStorage.getItem("token")
+                                }
+                            }).then((res) => {
+                                FileDownload(res.data, fileName);
+                            }).catch((err) => {
+                                alert("Bad Request!")
+                            })
+
+                        }
+                    }
+                }).catch((err) => {
+                    alert("Bad Request!");
+                })
+        }
+        return (<Button onClick={getDocument} variant="outlined">
+            Download
+        </Button>)
     }
+
+
+    reqs.map((req) => {
+        req.document = showDownload(req.id);
+    })
+
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
+            <TableContainer sx={{ maxHeight: 520 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
@@ -158,13 +144,13 @@ export default function RequestsTable(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows
+                        {reqs
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => {
+                            .map((req) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.requestId}>
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={req.id}>
                                         {columns.map((column) => {
-                                            const value = row[column.id];
+                                            const value = req[column.id];
                                             return (
                                                 <TableCell key={column.id} align={column.align}>
                                                     {value}
@@ -180,7 +166,7 @@ export default function RequestsTable(props) {
             <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={rows.length}
+                count={reqs.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

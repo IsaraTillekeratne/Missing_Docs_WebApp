@@ -84,4 +84,36 @@ Router.put("/deleteTeam", validateToken, adminRole, (req, res) => {
     })
 })
 
+// get all requests
+Router.get("/requests", validateToken, adminRole, (req, res) => {
+    db.query("SELECT id,doc_date,placed_date,amount,partner,comments FROM request", (err, result) => {
+        if (err) res.sendStatus(400);
+        else {
+            res.send(result);
+        }
+    })
+});
+
+// get document for a request
+Router.get("/document", validateToken, adminRole, (req, res) => {
+    const reqId = req.query.reqId;
+    db.query("SELECT document FROM sent WHERE requestid = ?", reqId, (err, result) => {
+        if (err) res.sendStatus(400);
+        else {
+            res.send(result);
+        }
+    })
+});
+
+// file download
+Router.get("/download", validateToken, adminRole, (req, res) => {
+    const fileName = req.query.fileName;
+    const path = "./Routes/uploads/" + fileName;
+    try {
+        res.download(path);
+    } catch {
+        res.sendStatus(400);
+    }
+})
+
 module.exports = Router;

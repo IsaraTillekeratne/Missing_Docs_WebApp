@@ -63,4 +63,50 @@ Router.post("/assignClients", validateToken, leaderRole, (req, res) => {
 
 })
 
+// get requests of a client (sent only by his members)
+Router.get("/requests", validateToken, leaderRole, (req, res) => {
+    const leaderId = req.userId;
+    const clientId = req.query.clientId;
+    // get ids of his members
+    db.query("SELECT id FROM user WHERE role = 'M' AND leader_id = ?", leaderId, (err, results) => {
+        if (err) res.sendStatus(400);
+        else {
+            let memberIds = [];
+            results.map((result) => {
+                memberIds.push(result.id);
+            })
+            // get requestids from sent
+            db.query("SELECT requestid FROM sent WHERE clientid = ? AND memberid IN (?)", [clientId, memberIds], (err, result) => {
+                if (err) res.sendStatus(400);
+                else {
+                    // remove null requestids
+                    let nullIdIndexes = [];
+                    for (let i = 0; i < result.length; i++) {
+                        if (result[i].requestid === null) nullIdIndexes.push(i);
+                    }
+
+                    for (var i = nullIdIndexes.length - 1; i >= 0; i--) {
+                        result.splice(nullIdIndexes[i], 1);
+                    }
+                    const len = result.length
+                    let reqs = [];
+                    let index = 0;
+                    result.map((request) => {
+                        db.query("SELECT id,doc_date,placed_date,amount,partner,comments FROM request WHERE id = ?", request.requestid, (err, queryRes) => {
+                            if (err) res.sendStatus(400);
+                            else {
+                                reqs.push(queryRes[0]);
+                                if (index === len - 1) res.send(reqs);
+                                else index = index + 1;
+
+                            }
+                        })
+                    })
+
+                }
+            })
+        }
+    })
+})
+
 module.exports = Router;

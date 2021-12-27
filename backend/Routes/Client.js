@@ -30,7 +30,8 @@ Router.put("/uploadFile", validateToken, clientRole, (req, res) => {
         res.sendStatus(400);
     } else {
         const file = req.files.file;
-        const fileName = 'REQ' + reqId + 'FILE' + file.name;
+        file.name = 'REQ' + reqId + 'FILE' + file.name;
+        const fileName = file.name;
         file.mv(`${__dirname}/uploads/${fileName}`, err => {
             if (err) {
                 console.log(err);
