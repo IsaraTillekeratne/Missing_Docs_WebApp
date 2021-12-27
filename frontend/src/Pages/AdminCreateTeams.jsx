@@ -7,7 +7,7 @@ import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
 import CreateTeamForm from '../components/CreateTeamForm';
 import AllUsersTable from '../components/AllUsersTable';
-// import { useSelector } from 'react-redux';
+import User from '../components/User';
 
 const drawerWidth = 240;
 
@@ -44,7 +44,7 @@ function AdminCreateTeams(props) {
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
 
                     }}
-                >
+                ><User />
                     <SideBar user='A' />
                 </Drawer>
                 <Drawer
@@ -55,7 +55,7 @@ function AdminCreateTeams(props) {
 
                     }}
                     open
-                >
+                ><User />
                     <SideBar user='A' />
                 </Drawer>
             </Box>

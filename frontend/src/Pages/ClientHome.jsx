@@ -7,6 +7,7 @@ import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
 import ActualRequestsTable from '../components/ActualRequestsTable';
+import User from '../components/User';
 
 const drawerWidth = 240;
 
@@ -38,7 +39,7 @@ function ClientHome(props) {
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
 
                     }}
-                >
+                ><User />
                     <SideBar user='C' />
                 </Drawer>
                 <Drawer
@@ -49,7 +50,7 @@ function ClientHome(props) {
 
                     }}
                     open
-                >
+                ><User />
                     <SideBar user='C' />
                 </Drawer>
             </Box>

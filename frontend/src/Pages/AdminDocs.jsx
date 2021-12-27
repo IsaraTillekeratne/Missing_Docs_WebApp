@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
+import User from '../components/User';
 
 const drawerWidth = 240;
 
@@ -38,7 +39,7 @@ function AdminDocs(props) {
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
 
                     }}
-                >
+                ><User />
                     <SideBar user='A' />
                 </Drawer>
                 <Drawer
@@ -49,7 +50,7 @@ function AdminDocs(props) {
 
                     }}
                     open
-                >
+                ><User />
                     <SideBar user='A' />
                 </Drawer>
             </Box>

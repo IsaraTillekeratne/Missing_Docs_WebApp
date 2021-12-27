@@ -2,12 +2,13 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
-import SideBar from '../components/SideBar';
+//import SideBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
 import SideBarLogic from './SideBarLogic';
 import MemberRequestsTable from '../components/MemberRequestsTable';
 import TextBox from '../components/TextBox';
 import { useParams } from 'react-router-dom';
+import User from '../components/User';
 
 const drawerWidth = 240;
 
@@ -40,8 +41,8 @@ function MemberClientRequest(props) {
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
 
                     }}
-                >
-                    <SideBar user='M' />
+                ><User />
+
                 </Drawer>
                 <Drawer
                     variant="permanent"
@@ -51,8 +52,8 @@ function MemberClientRequest(props) {
 
                     }}
                     open
-                >
-                    <SideBar user='M' />
+                ><User />
+
                 </Drawer>
             </Box>
             <Box
