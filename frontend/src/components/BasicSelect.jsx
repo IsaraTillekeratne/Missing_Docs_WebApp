@@ -17,6 +17,12 @@ export default function BasicSelect(props) {
     const handleChange = (event) => {
         setUserRole(event.target.value);
         setIsRoleChange(true);
+        if (props.userRole === 'Team Leader')
+            alert("You are about to make changes to a team leader role. Please note that removing a leader role will also delete the team (if any) associated with the leader!");
+        else if (props.userRole === 'Team Member')
+            alert("You are about to make changes to a team member role. Please note that removing a member role will also result in losing its connections (if any) to teams, clients, and requests!");
+        else if (props.userRole === 'Client')
+            alert("You are about to make changes to a client role. Please note that removing a client role will also result in losing its connections (if any) to members, and requests!");
     };
 
     const saveRole = () => {
@@ -24,6 +30,7 @@ export default function BasicSelect(props) {
             Axios.put(`${process.env.REACT_APP_SERVER}/Admin/changeRole`, {
                 userRole: userRole,
                 userId: props.userId,
+                currentRole: props.userRole
             }, {
                 headers: {
                     "x-access-token": localStorage.getItem("token")

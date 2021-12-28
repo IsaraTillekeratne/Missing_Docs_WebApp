@@ -18,13 +18,57 @@ Router.get("/allUsers", validateToken, adminRole, (req, res) => {
 Router.put("/changeRole", validateToken, adminRole, (req, res) => {
     const role = req.body.userRole;
     const id = req.body.userId;
+    const currentRole = req.body.currentRole;
+
+    // handle if current role is leader
+    if (currentRole === 'Team Leader') {
+        db.query("UPDATE user SET leader_id = NULL WHERE leader_id = ?", id, (err, result) => {
+            if (err) res.status(400).send({ error: 'Bad request!' })
+        })
+    }
+    // handle if current role is member
+    else if (currentRole === 'Team Member') {
+        db.query("UPDATE user SET leader_id = NULL WHERE id = ?", id, (err, result) => {
+            if (err) res.status(400).send({ error: 'Bad request!' })
+            else {
+                // delete associated entries in assigned_to, request, sent
+                db.query("DELETE FROM assigned_to WHERE id_member = ?", id, (err, result) => {
+                    if (err) res.status(400).send({ error: 'Bad request!' })
+                    else {
+                        db.query("DELETE from request WHERE member_id = ?", id, (err, result) => {
+                            if (err) res.status(400).send({ error: 'Bad request!' })
+                            else {
+                                db.query("DELETE FROM sent WHERE memberid = ?", id, (err, result) => {
+                                    if (err) res.status(400).send({ error: 'Bad request!' })
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    }
+    // handle if current role is client
+    else if (currentRole === 'Client') {
+        // delete entries from sent and assigned to
+        db.query("DELETE FROM assigned_to WHERE id_client = ?", id, (err, result) => {
+            if (err) res.status(400).send({ error: 'Bad request!' })
+            else {
+                db.query("DELETE FROM sent WHERE clientid = ?", id, (err, result) => {
+                    if (err) res.status(400).send({ error: 'Bad request!' })
+                })
+            }
+        })
+    }
+
+    // update role
     db.query("UPDATE user SET role = ? WHERE id = ?", [role, id], (err, result) => {
         if (err) res.status(400).send({ error: 'Bad request!' })
-        else {
-            res.send('User role updated');
-        }
+        else res.send("User role updated!");
     })
 });
+
+
 
 // get leader id, name, email
 Router.get("/leaders", validateToken, adminRole, (req, res) => {

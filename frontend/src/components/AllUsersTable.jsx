@@ -22,8 +22,8 @@ const columns = [
     { id: 'delete', label: 'Delete User', minWidth: 170, align: 'right', },
 ];
 
-const showIcon = (id) => {
-    return (<BasicSelect userId={id} title="click to save" />);
+const showIcon = (id, role) => {
+    return (<BasicSelect userId={id} userRole={role} title="click to save" />);
 }
 
 export default function AllUsersTable() {
@@ -78,8 +78,11 @@ export default function AllUsersTable() {
         else if (user.role === 'L') user.role = 'Team Leader';
         else if (user.role === 'M') user.role = 'Team Member';
         else if (user.role === 'C') user.role = 'Client';
-        user.icon = showIcon(user.id);
-        user.delete = showIconDel(user.id);
+        if (user.role != 'Admin') {
+            user.icon = showIcon(user.id, user.role);
+            user.delete = showIconDel(user.id);
+        }
+
     })
 
     const handleChangePage = (event, newPage) => {
