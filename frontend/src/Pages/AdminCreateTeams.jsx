@@ -3,8 +3,6 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import SideBar from '../components/SideBar';
-import TopBar from '../components/TopBar';
-import SideBarLogic from './SideBarLogic';
 import CreateTeamForm from '../components/CreateTeamForm';
 import AllUsersTable from '../components/AllUsersTable';
 import User from '../components/User';

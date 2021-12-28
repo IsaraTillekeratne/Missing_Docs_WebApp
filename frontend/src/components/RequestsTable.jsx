@@ -32,7 +32,6 @@ export default function RequestsTable(props) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [reqs, setReqs] = useState([]);
-    const [doc, setDoc] = useState(null);
     const [view, setView] = useState("A"); // for actual and provided toggle
 
     const handleChangePage = (event, newPage) => {

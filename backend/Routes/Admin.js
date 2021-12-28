@@ -3,6 +3,9 @@ const db = require("../connection");
 const Router = express.Router();
 const { validateToken } = require('../jwt');
 const { adminRole } = require('../middlewares/userRole');
+const mysqldump = require('mysqldump')
+
+require('dotenv').config();
 
 // display all users
 Router.get("/allUsers", validateToken, adminRole, (req, res) => {
@@ -193,6 +196,24 @@ Router.get("/download", validateToken, adminRole, (req, res) => {
         //res.status(400).send({ error: 'Bad request!' })
     });
 
+})
+
+// backup db
+Router.get("/backupDB", validateToken, adminRole, (req, res) => {
+    let password = process.env.DBPASSWORD;
+    let database = process.env.DBNAME;
+
+    const dumpFileName = `${Math.round(Date.now() / 1000)}.dump.sql`
+    mysqldump({
+        connection: {
+            host: 'localhost',
+            user: 'root',
+            password: password,
+            database: database,
+        },
+        dumpToFile: `${dumpFileName}`,
+    });
+    res.send("Database Back Up Created On Server!")
 })
 
 module.exports = Router;

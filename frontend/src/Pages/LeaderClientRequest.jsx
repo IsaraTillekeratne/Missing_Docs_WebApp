@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
-import TopBar from '../components/TopBar';
-import SideBarLogic from './SideBarLogic';
 import RequestsTable from '../components/RequestsTable';
 import { useParams } from 'react-router-dom';
 import User from '../components/User';

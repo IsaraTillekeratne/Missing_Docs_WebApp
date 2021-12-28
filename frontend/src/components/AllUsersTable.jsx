@@ -78,7 +78,7 @@ export default function AllUsersTable() {
         else if (user.role === 'L') user.role = 'Team Leader';
         else if (user.role === 'M') user.role = 'Team Member';
         else if (user.role === 'C') user.role = 'Client';
-        if (user.role != 'Admin') {
+        if (user.role !== 'Admin') {
             user.icon = showIcon(user.id, user.role);
             user.delete = showIconDel(user.id);
         }

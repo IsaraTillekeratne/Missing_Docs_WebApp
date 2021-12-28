@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,10 +10,14 @@ import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
 function AdminRequests(props) {
+    let navigate = useNavigate();
     const { window } = props;
     //const { mobileOpen, handleDrawerToggle } = SideBarLogic();
     const container = window !== undefined ? () => window().document.body : undefined;
@@ -23,6 +26,23 @@ function AdminRequests(props) {
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
+
+    const backupDB = () => {
+        Axios.get(`${process.env.REACT_APP_SERVER}/Admin/backupDB`, {
+            headers: {
+                "x-access-token": localStorage.getItem("token")
+            }
+        })
+            .then((response) => {
+                alert(response.data);
+            }).catch((e) => {
+                alert(e.response.data.error);
+                if (e.response.data.auth === false) {
+                    alert("Please sign in again!");
+                    navigate('/Signin');
+                }
+            })
+    }
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -91,18 +111,14 @@ function AdminRequests(props) {
             >
                 <Toolbar />
                 <RequestsTable user='A' />
-
+                <br></br>
+                <Button variant='outlined' size="large" onClick={backupDB}
+                >BACK UP DATABASE</Button>
             </Box>
         </Box>
     );
 }
 
-AdminRequests.propTypes = {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
-};
+
 
 export default AdminRequests;

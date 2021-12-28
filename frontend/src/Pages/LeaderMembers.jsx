@@ -4,8 +4,6 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import SideBar from '../components/SideBar';
-import TopBar from '../components/TopBar';
-import SideBarLogic from './SideBarLogic';
 import MembersTable from '../components/MembersTable';
 import User from '../components/User';
 import MenuIcon from '@mui/icons-material/Menu';
