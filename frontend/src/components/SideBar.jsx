@@ -21,9 +21,9 @@ export default function SideBar(props) {
     let titles;
 
     if (props.user === 'A') {
-        links = ['./AdminTeams', './AdminCreateTeams', './AdminRequests', './AdminDocs']
-        icons = [<GroupsRoundedIcon />, <AddCircleRoundedIcon />, <SendRoundedIcon />, <DocumentScannerRoundedIcon />]
-        titles = ['Teams', 'Create Teams', 'Requests', 'Documents']
+        links = ['./AdminTeams', './AdminCreateTeams', './AdminRequests']
+        icons = [<GroupsRoundedIcon />, <AddCircleRoundedIcon />, <SendRoundedIcon />]
+        titles = ['Teams', 'Create Teams', 'Requests']
     } else if (props.user === 'L') {
         links = ['./LeaderClients', './LeaderMembers']
         icons = [<DocumentScannerRoundedIcon />, <GroupsRoundedIcon />]

@@ -7,7 +7,6 @@ import ErrorPage from '../Pages/ErrorPage';
 import AdminHome from '../Pages/AdminHome';
 import AdminCreateTeams from '../Pages/AdminCreateTeams';
 import AdminRequests from '../Pages/AdminRequests';
-import AdminDocs from '../Pages/AdminDocs';
 import LeaderHome from '../Pages/LeaderHome';
 import LeaderMembers from '../Pages/LeaderMembers';
 import LeaderClientRequest from '../Pages/LeaderClientRequest';
@@ -50,7 +49,6 @@ function App() {
                     <Route path="/AdminTeams" element={<AdminHome />} />
                     <Route path="/AdminCreateTeams" element={<AdminCreateTeams />} />
                     <Route path="/AdminRequests" element={<AdminRequests />} />
-                    <Route path="/AdminDocs" element={<AdminDocs />} />
                     <Route path="/LeaderHome" element={<LeaderHome />} />
                     <Route path="/LeaderClients" element={<LeaderHome />} />
                     <Route path="/LeaderClientRequest/:clientId" element={<LeaderClientRequest />} />

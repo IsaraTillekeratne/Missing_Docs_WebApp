@@ -1,23 +1,54 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import SideBar from '../components/SideBar';
-import TopBar from '../components/TopBar';
-import SideBarLogic from './SideBarLogic';
 import TeamsTable from '../components/TeamsTable';
 import User from '../components/User';
+import MenuIcon from '@mui/icons-material/Menu';
+import Typography from '@mui/material/Typography';
+import CssBaseline from '@mui/material/CssBaseline';
+import AppBar from '@mui/material/AppBar';
+import IconButton from '@mui/material/IconButton';
 
 const drawerWidth = 240;
 
 function AdminHome(props) {
     const { window } = props;
-    const { mobileOpen, handleDrawerToggle } = SideBarLogic();
+    //const { mobileOpen, handleDrawerToggle } = SideBarLogic();
     const container = window !== undefined ? () => window().document.body : undefined;
+    const [mobileOpen, setMobileOpen] = useState(false);
+
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+    };
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <TopBar title="Teams" />
+            <CssBaseline />
+            <AppBar
+                position="fixed"
+                sx={{
+                    width: { sm: `calc(100% - ${drawerWidth}px)` },
+                    ml: { sm: `${drawerWidth}px` },
+                    bgcolor: '#DDDDDD'
+                }}
+            >
+                <Toolbar>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        edge="start"
+                        onClick={handleDrawerToggle}
+                        sx={{ mr: 2, display: { sm: 'none' } }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" noWrap component="div" color={"#222831"}>
+                        Teams
+                    </Typography>
+                </Toolbar>
+            </AppBar>
             <Box
                 component="nav"
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}

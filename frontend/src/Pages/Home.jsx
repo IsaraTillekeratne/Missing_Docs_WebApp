@@ -15,22 +15,25 @@ export default function Home() {
                 justifyContent: 'center',
             }}>
                 <div style={{ marginTop: "50px", fontSize: "2.5em" }}>
-                    <h1>Missing Documents</h1>
-                    <Skeleton
-                        sx={{ bgcolor: 'grey.900' }}
-                        variant="rectangular"
-                        width={712}
-                        height={40}
-                    />
-                    <div style={{ marginLeft: "165px" }}>
+                    <Container><h1>Missing Documents</h1>
+                        <Skeleton
+                            sx={{ bgcolor: 'grey.900' }}
+                            variant="rectangular"
+                        // width={712}
+                        // height={40}
 
-                        <Button variant="contained" size="large" style={{ margin: "50px", backgroundColor: "#30475E" }} component="a" href='./Signup'>
-                            Sign Up
-                        </Button>
-                        <Button variant="contained" size="large" style={{ backgroundColor: "#30475E" }} component="a" href='./Signin'>
-                            Sign in
-                        </Button>
-                    </div>
+                        />
+                        <div style={{ marginTop: "60px", textAlign: "center" }}>
+
+                            <Button variant="contained" size="large" style={{ marginRight: "20px", backgroundColor: "#30475E" }} component="a" href='./Signup'>
+                                Sign Up
+                            </Button>
+                            <Button variant="contained" size="large" style={{ marginLeft: "20px", backgroundColor: "#30475E" }} component="a" href='./Signin'>
+                                Sign in
+                            </Button>
+                        </div></Container>
+
+
                 </div>
 
             </Box>

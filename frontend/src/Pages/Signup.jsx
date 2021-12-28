@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,11 +12,35 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../Helpers/AuthContext';
 
 const theme = createTheme();
 
 export default function Signup() {
+    const { authState } = useContext(AuthContext);
     let navigate = useNavigate();
+    // if user is already signed in -> redirect to his home page
+    if (authState === true) {
+        Axios.get(`${process.env.REACT_APP_SERVER}/UserRoles/getRole`, {
+            headers: {
+                "x-access-token": localStorage.getItem("token")
+            }
+        }).then((response) => {
+            let role = response.data.role;
+            if (role === 'A') navigate("/AdminHome")
+            else if (role === 'C') navigate("/ClientHome")
+            else if (role === 'L') navigate("/LeaderHome")
+            else if (role === 'M') navigate("/MemberHome")
+        }).catch((e) => {
+            alert(e.response.data.error);
+            if (e.response.data.auth === false) {
+                alert("Please sign in again!");
+                navigate('/Signin');
+            } else {
+                navigate("/NoUserRole")
+            }
+        })
+    }
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
