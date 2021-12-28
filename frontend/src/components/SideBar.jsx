@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -8,8 +8,13 @@ import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import DocumentScannerRoundedIcon from '@mui/icons-material/DocumentScannerRounded';
+import Button from '@mui/material/Button';
+import { AuthContext } from '../Helpers/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function SideBar(props) {
+    let navigate = useNavigate();
+    const { authState, setAuthState } = useContext(AuthContext);
 
     let links;
     let icons;
@@ -37,6 +42,13 @@ export default function SideBar(props) {
         return icons[index];
     }
 
+    const signout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("name");
+        setAuthState(false);
+        navigate('/');
+    }
+
     return (
         <div>
 
@@ -49,6 +61,15 @@ export default function SideBar(props) {
                     </ListItem>
                 ))}
             </List>
+            {authState === true ? <Button
+                variant="contained"
+                fullWidth
+                size="small"
+                onClick={signout}
+            >
+                Log out
+            </Button> :
+                null}
         </div>
     );
 }
