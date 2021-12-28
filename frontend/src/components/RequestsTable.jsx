@@ -78,8 +78,6 @@ export default function RequestsTable(props) {
             })
                 .then((response) => {
 
-
-
                     if (response.data[0].document === null) alert("File is not provided yet!")
                     else {
                         let fileName = response.data[0].document;
@@ -91,6 +89,7 @@ export default function RequestsTable(props) {
                             method: "GET",
                             responseType: "blob",
                             headers: {
+                                // "Access-Control-Allow-Origin": "*",
                                 "x-access-token": localStorage.getItem("token")
                             }
                         }).then((response) => {

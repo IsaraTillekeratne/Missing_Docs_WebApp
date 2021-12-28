@@ -186,12 +186,13 @@ Router.get("/document", validateToken, adminRole, (req, res) => {
 // file download
 Router.get("/download", validateToken, adminRole, (req, res) => {
     const fileName = req.query.fileName;
-    const path = "./Routes/uploads/" + fileName;
-    try {
-        res.download(path);
-    } catch {
-        res.status(400).send({ error: 'Bad request!' })
-    }
+    const path = __dirname + "/uploads/" + fileName;
+
+    res.sendFile(path, (err) => {
+        console.log(err)
+        //res.status(400).send({ error: 'Bad request!' })
+    });
+
 })
 
 module.exports = Router;
