@@ -120,4 +120,27 @@ Router.put("/unMark", validateToken, leaderRole, (req, res) => {
     })
 });
 
+// get document for a request
+Router.get("/document", validateToken, leaderRole, (req, res) => {
+    const reqId = req.query.reqId;
+    db.query("SELECT document FROM sent WHERE requestid = ?", reqId, (err, result) => {
+        if (err) res.status(400).send({ error: 'Bad request!' })
+        else {
+            res.send(result);
+        }
+    })
+});
+
+// file download
+Router.get("/download", validateToken, leaderRole, (req, res) => {
+    const fileName = req.query.fileName;
+    const path = __dirname + "/uploads/" + fileName;
+
+    res.sendFile(path, (err) => {
+        console.log(err)
+        //res.status(400).send({ error: 'Bad request!' })
+    });
+
+})
+
 module.exports = Router;

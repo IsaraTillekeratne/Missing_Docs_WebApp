@@ -15,6 +15,8 @@ import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import DownloadForOfflineRoundedIcon from '@mui/icons-material/DownloadForOfflineRounded';
+import FileDownload from 'js-file-download';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -145,7 +147,7 @@ export default function MemberRequestsTable(props) {
             })
     }, [view]);
 
-    const showIconUnmark = (requestid) => {
+    const showIconUnmark = (requestid, document) => {
         const markNotProvided = () => {
             Axios.put(`${process.env.REACT_APP_SERVER}/Member/unmark`, {
                 reqId: requestid
@@ -166,18 +168,42 @@ export default function MemberRequestsTable(props) {
                     window.location.reload(true);
                 })
         }
+
+        const downloadDoc = () => {
+            let fileName = document;
+            let url = `${process.env.REACT_APP_SERVER}/Member/download?fileName=${fileName}`
+            Axios({
+                url: url,
+                method: "GET",
+                responseType: "blob",
+                headers: {
+                    // "Access-Control-Allow-Origin": "*",
+                    "x-access-token": localStorage.getItem("token")
+                }
+            }).then((response) => {
+                FileDownload(response.data, fileName);
+            }).catch((e) => {
+                alert(e.response.data.error);
+                if (e.response.data.auth === false) {
+                    alert("Please sign in again!");
+                    navigate('/Signin');
+                }
+            })
+        }
         return (<div>
 
-            {view === 'P' ? <IconButton title="Click to mark as not provided" onClick={markNotProvided}>
-                <CancelRoundedIcon />
-            </IconButton> : null}
+            {view === 'P' ? <div>
+                <IconButton title="Click to download" onClick={downloadDoc}><DownloadForOfflineRoundedIcon /></IconButton>
+                <IconButton title="Click to mark as not provided" onClick={markNotProvided}>
+                    <CancelRoundedIcon />
+                </IconButton></div> : null}
         </div>)
     }
 
     reqs.map((req) => {
         req.edit = showIconEdit(req.requestid);
         req.delete = showIconDel(req.requestid);
-        req.unmark = showIconUnmark(req.requestid);
+        req.unmark = showIconUnmark(req.requestid, req.document);
     })
 
     const handleView = (event) => {

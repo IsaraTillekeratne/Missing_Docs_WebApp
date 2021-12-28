@@ -70,7 +70,7 @@ export default function RequestsTable(props) {
         const getDocument = () => {
             let docEndPoint = '';
             if (props.user === 'A') docEndPoint = `${process.env.REACT_APP_SERVER}/Admin/document?reqId=${id}`;
-            else if (props.user === 'L') docEndPoint = "";
+            else if (props.user === 'L') docEndPoint = `${process.env.REACT_APP_SERVER}/Leader/document?reqId=${id}`;
             Axios.get(docEndPoint, {
                 headers: {
                     "x-access-token": localStorage.getItem("token")
@@ -83,7 +83,7 @@ export default function RequestsTable(props) {
                         let fileName = response.data[0].document;
                         let url = "";
                         if (props.user === 'A') url = `${process.env.REACT_APP_SERVER}/Admin/download?fileName=${fileName}`;
-                        else if (props.user === 'L') url = "";
+                        else if (props.user === 'L') url = `${process.env.REACT_APP_SERVER}/Leader/download?fileName=${fileName}`;
                         Axios({
                             url: url,
                             method: "GET",
