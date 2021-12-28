@@ -202,12 +202,14 @@ Router.get("/download", validateToken, adminRole, (req, res) => {
 Router.get("/backupDB", validateToken, adminRole, (req, res) => {
     let password = process.env.DBPASSWORD;
     let database = process.env.DBNAME;
+    let user = process.env.DBUSER;
+    let host = process.env.DBHOST;
 
     const dumpFileName = `${Math.round(Date.now() / 1000)}.dump.sql`
     mysqldump({
         connection: {
-            host: 'localhost',
-            user: 'root',
+            host: host,
+            user: user,
             password: password,
             database: database,
         },

@@ -3,11 +3,13 @@ require('dotenv').config();
 
 let password = process.env.DBPASSWORD;
 let database = process.env.DBNAME;
+let user = process.env.DBUSER;
+let host = process.env.DBHOST;
 
 // mysql connection
 var db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
+    host: host,
+    user: user,
     password: password,
     database: database,
 });
