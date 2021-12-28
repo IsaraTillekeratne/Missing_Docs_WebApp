@@ -8,6 +8,8 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import BasicSelect from './BasicSelect';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import IconButton from '@mui/material/IconButton';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,17 +19,18 @@ const columns = [
     { id: 'email', label: 'Email', minWidth: 170, align: 'left', },
     { id: 'role', label: 'Role', minWidth: 150, align: 'left', },
     { id: 'icon', label: 'Set Role', minWidth: 170, align: 'right', },
+    { id: 'delete', label: 'Delete User', minWidth: 170, align: 'right', },
 ];
 
 const showIcon = (id) => {
-    return (<BasicSelect userId={id} />);
+    return (<BasicSelect userId={id} title="click to save" />);
 }
 
 export default function AllUsersTable() {
 
     let navigate = useNavigate();
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(25);
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
@@ -47,12 +50,36 @@ export default function AllUsersTable() {
             })
     }, []);
 
+    const showIconDel = (id) => {
+
+        const deleteUser = () => {
+            Axios.delete(`${process.env.REACT_APP_SERVER}/Admin/deleteUser?id=${id}`, {
+                headers: {
+                    "x-access-token": localStorage.getItem("token")
+                }
+            })
+                .then((response) => {
+                    alert(response.data);
+                    window.location.reload(true);
+                }).catch((e) => {
+                    alert(e.response.data.error);
+                    if (e.response.data.auth === false) {
+                        alert("Please sign in again!");
+                        navigate('/Signin');
+                    }
+                })
+        }
+
+        return (<IconButton onClick={deleteUser} title="Click to delete user"><DeleteRoundedIcon /></IconButton>);
+    }
+
     users.map((user) => {
         if (user.role === 'A') user.role = 'Admin';
         else if (user.role === 'L') user.role = 'Team Leader';
         else if (user.role === 'M') user.role = 'Team Member';
         else if (user.role === 'C') user.role = 'Client';
         user.icon = showIcon(user.id);
+        user.delete = showIconDel(user.id);
     })
 
     const handleChangePage = (event, newPage) => {
@@ -66,7 +93,7 @@ export default function AllUsersTable() {
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
+            <TableContainer sx={{ maxHeight: 520 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
@@ -102,7 +129,7 @@ export default function AllUsersTable() {
                 </Table>
             </TableContainer>
             <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
+                rowsPerPageOptions={[25, 50, 100]}
                 component="div"
                 count={users.length}
                 rowsPerPage={rowsPerPage}

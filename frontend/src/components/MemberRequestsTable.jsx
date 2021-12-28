@@ -12,6 +12,9 @@ import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,6 +24,7 @@ const columns = [
     { id: 'partner', label: 'Partner', minWidth: 100, align: 'left', },
     { id: 'comments', label: 'Comments', minWidth: 200, align: 'left', },
     { id: 'document', label: 'Document', minWidth: 120, align: 'right', },
+    { id: 'unmark', label: '', minWidth: 50, align: 'right', },
     { id: 'edit', label: 'Edit', minWidth: 120, align: 'right', },
     { id: 'delete', label: 'Delete', minWidth: 150, align: 'right', },
 ];
@@ -35,6 +39,7 @@ export default function MemberRequestsTable(props) {
     const [reqs, setReqs] = useState([]);
     const [editReqId, setEditReqId] = useState(null);
     const [editReqIndex, setEditReqIndex] = useState(null);
+    const [view, setView] = useState("A"); // for actual and provided toggle
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -122,7 +127,7 @@ export default function MemberRequestsTable(props) {
     }
 
     useEffect(() => {
-        Axios.get(`${process.env.REACT_APP_SERVER}/Member/requests?clientId=${client_id}`, {
+        Axios.get(`${process.env.REACT_APP_SERVER}/Member/requests?clientId=${client_id}&type=${view}`, {
             headers: {
                 "x-access-token": localStorage.getItem("token")
             }
@@ -138,14 +143,59 @@ export default function MemberRequestsTable(props) {
                     navigate('/Signin');
                 }
             })
-    }, []);
+    }, [view]);
+
+    const showIconUnmark = (requestid) => {
+        const markNotProvided = () => {
+            Axios.put(`${process.env.REACT_APP_SERVER}/Member/unmark`, {
+                reqId: requestid
+            }, {
+                headers: {
+                    "x-access-token": localStorage.getItem("token")
+                }
+            })
+                .then((response) => {
+                    alert(response.data);
+                    window.location.reload(true);
+                }).catch((e) => {
+                    alert(e.response.data.error);
+                    if (e.response.data.auth === false) {
+                        alert("Please sign in again!");
+                        navigate('/Signin');
+                    }
+                    window.location.reload(true);
+                })
+        }
+        return (<div>
+
+            {view === 'P' ? <IconButton title="Click to mark as not provided" onClick={markNotProvided}>
+                <CancelRoundedIcon />
+            </IconButton> : null}
+        </div>)
+    }
 
     reqs.map((req) => {
         req.edit = showIconEdit(req.requestid);
         req.delete = showIconDel(req.requestid);
+        req.unmark = showIconUnmark(req.requestid);
     })
 
-    return (
+    const handleView = (event) => {
+        setView(event.target.value);
+    };
+
+    return (<div>
+        <Select
+            labelId="select-label"
+            id="simple-select"
+            value={view}
+            label="View"
+            onChange={handleView}
+            sx={{ marginBottom: "10px" }}
+        >
+            <MenuItem value="A">Actual</MenuItem>
+            <MenuItem value="P">Provided</MenuItem>
+        </Select>
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 520 }}>
                 <Table stickyHeader aria-label="sticky table">
@@ -197,6 +247,7 @@ export default function MemberRequestsTable(props) {
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
         </Paper>
+    </div>
     );
 }
 

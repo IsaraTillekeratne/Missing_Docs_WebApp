@@ -49,11 +49,12 @@ Router.post("/sendRequests", validateToken, memberRole, (req, res) => {
 Router.get("/requests", validateToken, memberRole, (req, res) => {
     const clientId = req.query.clientId;
     const memberId = req.userId;
-
+    const type = req.query.type;
     // find requestids for the given pair of member-client
-    db.query("SELECT requestid,document FROM sent WHERE clientid = ? AND memberid = ?", [clientId, memberId], (err, results) => {
+    db.query("SELECT requestid,document FROM sent WHERE clientid = ? AND memberid = ? AND type = ?", [clientId, memberId, type], (err, results) => {
         if (err) res.status(400).send({ error: 'Bad request!' })
         else {
+            if (results.length === 0) res.send([]);
             const requests = getRequests(...results);
             requests.then((response) => {
                 res.send(response);
@@ -89,5 +90,14 @@ Router.put("/editRequest", validateToken, memberRole, (req, res) => {
             else res.send("Successfully updated");
         })
 })
+
+// mark as not provided
+Router.put("/unMark", validateToken, memberRole, (req, res) => {
+    const reqId = req.body.reqId;
+    db.query("UPDATE sent SET type = 'A' WHERE requestid = ?", reqId, (err, result) => {
+        if (err) res.status(400).send({ error: 'Bad request!' })
+        else res.send("Marked as not provided!");
+    })
+});
 
 module.exports = Router;

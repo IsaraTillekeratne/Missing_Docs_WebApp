@@ -31,7 +31,7 @@ const validateToken = (req, res, next) => {
             }
         }
         catch (err) {
-            res.status(401).send({ auth: false, error: 'Invalid Token' })
+            res.status(401).send({ auth: false, error: 'Authorisation failed!' })
             //res.sendStatus(401);
         }
 

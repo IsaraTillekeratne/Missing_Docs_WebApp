@@ -36,6 +36,15 @@ Router.get("/leaders", validateToken, adminRole, (req, res) => {
     })
 });
 
+// delete a user
+Router.delete("/deleteUser", validateToken, adminRole, (req, res) => {
+    const id = req.query.id;
+    db.query("DELETE FROM user WHERE id = ?", id, (err, result) => {
+        if (err) res.status(400).send({ error: 'Bad request!' })
+        else res.send("User Deleted!");
+    })
+})
+
 // get unassigned member id, name, email
 Router.get("/unassignedMembers", validateToken, adminRole, (req, res) => {
     db.query("SELECT id,name,email FROM user where role = 'M' AND leader_id is NULL", (err, result) => {
@@ -86,12 +95,37 @@ Router.put("/deleteTeam", validateToken, adminRole, (req, res) => {
 
 // get all requests
 Router.get("/requests", validateToken, adminRole, (req, res) => {
-    db.query("SELECT id,doc_date,placed_date,amount,partner,comments FROM request", (err, result) => {
+    const type = req.query.type;
+    db.query("SELECT requestid FROM sent WHERE type = ?", type, (err, result) => {
         if (err) res.status(400).send({ error: 'Bad request!' })
         else {
-            res.send(result);
+            if (result.length === 0) res.send([]);
+            // remove null requestids
+            let nullIdIndexes = [];
+            for (let i = 0; i < result.length; i++) {
+                if (result[i].requestid === null) nullIdIndexes.push(i);
+            }
+
+            for (var i = nullIdIndexes.length - 1; i >= 0; i--) {
+                result.splice(nullIdIndexes[i], 1);
+            }
+            const len = result.length
+            let reqs = [];
+            let index = 0;
+            result.map((request) => {
+                db.query("SELECT id,doc_date,placed_date,amount,partner,comments FROM request WHERE id = ?", request.requestid, (err, queryRes) => {
+                    if (err) res.status(400).send({ error: 'Bad request!' })
+                    else {
+                        reqs.push(queryRes[0]);
+                        if (index === len - 1) res.send(reqs);
+                        else index = index + 1;
+
+                    }
+                })
+            })
         }
     })
+
 });
 
 // get document for a request

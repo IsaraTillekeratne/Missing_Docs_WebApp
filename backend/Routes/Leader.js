@@ -65,6 +65,7 @@ Router.post("/assignClients", validateToken, leaderRole, (req, res) => {
 
 // get requests of a client (sent only by his members)
 Router.get("/requests", validateToken, leaderRole, (req, res) => {
+    const type = req.query.type; // Actual or Provided
     const leaderId = req.userId;
     const clientId = req.query.clientId;
     // get ids of his members
@@ -76,9 +77,10 @@ Router.get("/requests", validateToken, leaderRole, (req, res) => {
                 memberIds.push(result.id);
             })
             // get requestids from sent
-            db.query("SELECT requestid FROM sent WHERE clientid = ? AND memberid IN (?)", [clientId, memberIds], (err, result) => {
+            db.query("SELECT requestid FROM sent WHERE clientid = ? AND type = ? AND memberid IN (?)", [clientId, type, memberIds], (err, result) => {
                 if (err) res.status(400).send({ error: 'Bad request!' })
                 else {
+                    if (result.length === 0) res.send([]);
                     // remove null requestids
                     let nullIdIndexes = [];
                     for (let i = 0; i < result.length; i++) {
@@ -108,5 +110,14 @@ Router.get("/requests", validateToken, leaderRole, (req, res) => {
         }
     })
 })
+
+// mark as not provided
+Router.put("/unMark", validateToken, leaderRole, (req, res) => {
+    const reqId = req.body.reqId;
+    db.query("UPDATE sent SET type = 'A' WHERE requestid = ?", reqId, (err, result) => {
+        if (err) res.status(400).send({ error: 'Bad request!' })
+        else res.send("Marked as not provided!");
+    })
+});
 
 module.exports = Router;

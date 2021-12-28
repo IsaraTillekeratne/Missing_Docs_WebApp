@@ -9,6 +9,10 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
 import FileDownload from 'js-file-download';
+import Select from '@mui/material/Select';
+import IconButton from '@mui/material/IconButton';
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import MenuItem from '@mui/material/MenuItem';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -29,6 +33,7 @@ export default function RequestsTable(props) {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [reqs, setReqs] = useState([]);
     const [doc, setDoc] = useState(null);
+    const [view, setView] = useState("A"); // for actual and provided toggle
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -41,8 +46,8 @@ export default function RequestsTable(props) {
 
     useEffect(() => {
         let endPoint = '';
-        if (props.user === 'A') endPoint = `${process.env.REACT_APP_SERVER}/Admin/requests`;
-        else if (props.user === 'L') endPoint = `${process.env.REACT_APP_SERVER}/Leader/requests?clientId=${props.clientId}`;
+        if (props.user === 'A') endPoint = `${process.env.REACT_APP_SERVER}/Admin/requests?type=${view}`;
+        else if (props.user === 'L') endPoint = `${process.env.REACT_APP_SERVER}/Leader/requests?clientId=${props.clientId}&type=${view}`;
         Axios.get(endPoint, {
             headers: {
                 "x-access-token": localStorage.getItem("token")
@@ -59,7 +64,7 @@ export default function RequestsTable(props) {
                     navigate('/Signin');
                 }
             })
-    }, []);
+    }, [view]);
 
     const showDownload = (id) => {
         const getDocument = () => {
@@ -108,9 +113,34 @@ export default function RequestsTable(props) {
                     }
                 })
         }
-        return (<Button onClick={getDocument} variant="outlined">
-            Download
-        </Button>)
+        const markNotProvided = () => {
+            Axios.put(`${process.env.REACT_APP_SERVER}/Leader/unMark`, {
+                reqId: id
+            }, {
+                headers: {
+                    "x-access-token": localStorage.getItem("token")
+                }
+            })
+                .then((response) => {
+                    alert(response.data);
+                    window.location.reload(true);
+                }).catch((e) => {
+                    alert(e.response.data.error);
+                    if (e.response.data.auth === false) {
+                        alert("Please sign in again!");
+                        navigate('/Signin');
+                    }
+                    window.location.reload(true);
+                })
+        }
+        return (<div>
+            {view === 'P' ? <Button onClick={getDocument} variant="outlined">
+                Download
+            </Button> : null}
+            {view === 'P' && props.user === 'L' ? <IconButton title="Click to mark as not provided" onClick={markNotProvided}>
+                <CancelRoundedIcon />
+            </IconButton> : null}
+        </div>)
     }
 
 
@@ -118,9 +148,25 @@ export default function RequestsTable(props) {
         req.document = showDownload(req.id);
     })
 
+    const handleView = (event) => {
+        setView(event.target.value);
+    };
 
-    return (
+
+    return (<div>
+        <Select
+            labelId="select-label"
+            id="simple-select"
+            value={view}
+            label="View"
+            onChange={handleView}
+            sx={{ marginBottom: "10px" }}
+        >
+            <MenuItem value="A">Actual</MenuItem>
+            <MenuItem value="P">Provided</MenuItem>
+        </Select>
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+
             <TableContainer sx={{ maxHeight: 520 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
@@ -166,6 +212,7 @@ export default function RequestsTable(props) {
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
         </Paper>
+    </div>
     );
 }
 

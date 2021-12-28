@@ -11,7 +11,7 @@ Router.get("/requests", validateToken, clientRole, (req, res) => {
     db.query("SELECT requestid FROM sent WHERE clientid = ? AND type = 'A'", [clientId], (err, results) => {
         if (err) res.status(400).send({ error: 'Bad request!' })
         else {
-
+            if (results.length === 0) res.send([]);
             const requests = getRequests(...results);
             requests.then((response) => {
                 res.send(response);
@@ -65,7 +65,7 @@ Router.get("/requestsProvided", validateToken, clientRole, (req, res) => {
     db.query("SELECT requestid FROM sent WHERE clientid = ? AND type = 'P'", [clientId], (err, results) => {
         if (err) res.status(400).send({ error: 'Bad request!' })
         else {
-
+            if (results.length === 0) res.send([]);
             const requests = getRequests(...results);
             requests.then((response) => {
                 res.send(response);
