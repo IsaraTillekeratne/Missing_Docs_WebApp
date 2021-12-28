@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,10 +12,12 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../Helpers/AuthContext';
 
 const theme = createTheme();
 
 export default function Signin() {
+    const { setAuthState } = useContext(AuthContext);
     let navigate = useNavigate();
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -36,7 +38,7 @@ export default function Signin() {
 
                 localStorage.setItem("token", response.data.token);
                 localStorage.setItem("name", response.data.name);
-                //setAuthState(true);
+                setAuthState(true);
 
                 // navigate based on user role *************************************
                 Axios.get(`${process.env.REACT_APP_SERVER}/UserRoles/getRole`, {

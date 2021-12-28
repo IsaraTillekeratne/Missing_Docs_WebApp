@@ -21,43 +21,45 @@ const columns = [
     { id: 'icon', label: 'Delete Team', minWidth: 170, align: 'right', },
 ];
 
-const showIcon = (leaderId) => {
 
-
-
-    const deleteTeam = () => {
-        Axios.put(`${process.env.REACT_APP_SERVER}/Admin/deleteTeam`, {
-            leaderId: leaderId
-        }, {
-            headers: {
-                "x-access-token": localStorage.getItem("token")
-            }
-        })
-            .then((response) => {
-
-                alert(response.data);
-                window.location.reload(true);
-
-            }).catch((e) => {
-                alert(e.response.data.error);
-                if (e.response.data.auth === false) {
-                    alert("Please sign in again!");
-                    navigate('/Signin');
-                }
-            })
-    }
-    return (<IconButton onClick={deleteTeam}><DeleteRoundedIcon /></IconButton>);
-}
-
-const showMembersList = (leaderId) => {
-    return (<TeamMembersList teamNumber={leaderId} />);
-}
 
 export default function StickyHeadTable() {
     let navigate = useNavigate();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     let [leaders, setLeaders] = React.useState([]);
+
+    const showIcon = (leaderId) => {
+
+
+
+        const deleteTeam = () => {
+            Axios.put(`${process.env.REACT_APP_SERVER}/Admin/deleteTeam`, {
+                leaderId: leaderId
+            }, {
+                headers: {
+                    "x-access-token": localStorage.getItem("token")
+                }
+            })
+                .then((response) => {
+
+                    alert(response.data);
+                    window.location.reload(true);
+
+                }).catch((e) => {
+                    alert(e.response.data.error);
+                    if (e.response.data.auth === false) {
+                        alert("Please sign in again!");
+                        navigate('/Signin');
+                    }
+                })
+        }
+        return (<IconButton onClick={deleteTeam}><DeleteRoundedIcon /></IconButton>);
+    }
+
+    const showMembersList = (leaderId) => {
+        return (<TeamMembersList teamNumber={leaderId} />);
+    }
 
     useEffect(() => {
         Axios.get(`${process.env.REACT_APP_SERVER}/Admin/leaders`, {

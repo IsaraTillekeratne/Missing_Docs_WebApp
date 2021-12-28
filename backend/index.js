@@ -12,6 +12,7 @@ const AdminRoute = require("./Routes/Admin");
 const LeaderRoute = require("./Routes/Leader");
 const MemberRoute = require("./Routes/Member");
 const ClientRoute = require("./Routes/Client");
+const AuthRoute = require("./Routes/Auth");
 
 app.use(express.json());
 app.use(fileUpload());
@@ -33,6 +34,7 @@ app.use("/Admin", AdminRoute);
 app.use("/Leader", LeaderRoute);
 app.use("/Member", MemberRoute);
 app.use("/Client", ClientRoute);
+app.use("/Auth", AuthRoute);
 
 app.listen(3001, function () {
     console.log('server running');
