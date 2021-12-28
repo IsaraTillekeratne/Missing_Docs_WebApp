@@ -64,19 +64,16 @@ export default function MemberRequestsTable(props) {
                 }
             })
                 .then((response) => {
-                    if (response.data.error) {
-                        alert(response.data.error);
-                        navigate('/Signin');
 
-                    } else if (response.status === 400) {
-                        alert("Error 400 Bad Request!")
+                    alert(response.data);
+                    window.location.reload(true);
+
+                }).catch((e) => {
+                    alert(e.response.data.error);
+                    if (e.response.data.auth === false) {
+                        alert("Please sign in again!");
+                        navigate('/Signin');
                     }
-                    else {
-                        alert(response.data);
-                        window.location.reload(true);
-                    }
-                }).catch((err) => {
-                    alert("Bad Request!");
                 })
 
         };
@@ -106,17 +103,15 @@ export default function MemberRequestsTable(props) {
                 }
             })
                 .then((response) => {
-                    if (response.data.error) {
 
-                        alert(response.data.error);
+                    alert(response.data);
+                    window.location.reload(true);
 
-
-                    } else if (response.status === 401) {
-                        alert("Authorisation Failed!")
-                    }
-                    else {
-                        alert(response.data);
-                        window.location.reload(true);
+                }).catch((e) => {
+                    alert(e.response.data.error);
+                    if (e.response.data.auth === false) {
+                        alert("Please sign in again!");
+                        navigate('/Signin');
                     }
                 })
         }
@@ -133,21 +128,15 @@ export default function MemberRequestsTable(props) {
             }
         })
             .then((response) => {
-                if (response.data.error) {
-                    console.log(response)
-                    alert(response.data.error);
-                    // redirection didnt work
-                    if ((response.data.auth) && (response.data.auth === false)) {
-                        navigate('/Signin');
-                    }
-                } else if (response.status === 400) {
-                    alert("Error 400 Bad Request!")
+
+                setReqs(response.data);
+
+            }).catch((e) => {
+                alert(e.response.data.error);
+                if (e.response.data.auth === false) {
+                    alert("Please sign in again!");
+                    navigate('/Signin');
                 }
-                else {
-                    setReqs(response.data);
-                }
-            }).catch((err) => {
-                alert("Bad Request!");
             })
     }, []);
 

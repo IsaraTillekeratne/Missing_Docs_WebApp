@@ -49,21 +49,15 @@ export default function RequestsTable(props) {
             }
         })
             .then((response) => {
-                if (response.data.error) {
-                    console.log(response)
-                    alert(response.data.error);
-                    // redirection didnt work
-                    if ((response.data.auth) && (response.data.auth === false)) {
-                        navigate('/Signin');
-                    }
-                } else if (response.status === 400) {
-                    alert("Error 400 Bad Request!")
+
+                setReqs(response.data);
+
+            }).catch((e) => {
+                alert(e.response.data.error);
+                if (e.response.data.auth === false) {
+                    alert("Please sign in again!");
+                    navigate('/Signin');
                 }
-                else {
-                    setReqs(response.data);
-                }
-            }).catch((err) => {
-                alert("Bad Request!");
             })
     }, []);
 
@@ -78,41 +72,40 @@ export default function RequestsTable(props) {
                 }
             })
                 .then((response) => {
-                    if (response.data.error) {
-                        console.log(response)
-                        alert(response.data.error);
-                        // redirection didnt work
-                        if ((response.data.auth) && (response.data.auth === false)) {
-                            navigate('/Signin');
-                        }
-                    } else if (response.status === 400) {
-                        alert("Error 400 Bad Request!")
-                    }
+
+
+
+                    if (response.data[0].document === null) alert("File is not provided yet!")
                     else {
+                        let fileName = response.data[0].document;
+                        let url = "";
+                        if (props.user === 'A') url = `${process.env.REACT_APP_SERVER}/Admin/download?fileName=${fileName}`;
+                        else if (props.user === 'L') url = "";
+                        Axios({
+                            url: url,
+                            method: "GET",
+                            responseType: "blob",
+                            headers: {
+                                "x-access-token": localStorage.getItem("token")
+                            }
+                        }).then((response) => {
+                            FileDownload(response.data, fileName);
+                        }).catch((e) => {
+                            alert(e.response.data.error);
+                            if (e.response.data.auth === false) {
+                                alert("Please sign in again!");
+                                navigate('/Signin');
+                            }
+                        })
 
-                        if (response.data[0].document === null) alert("File is not provided yet!")
-                        else {
-                            let fileName = response.data[0].document;
-                            let url = "";
-                            if (props.user === 'A') url = `${process.env.REACT_APP_SERVER}/Admin/download?fileName=${fileName}`;
-                            else if (props.user === 'L') url = "";
-                            Axios({
-                                url: url,
-                                method: "GET",
-                                responseType: "blob",
-                                headers: {
-                                    "x-access-token": localStorage.getItem("token")
-                                }
-                            }).then((res) => {
-                                FileDownload(res.data, fileName);
-                            }).catch((err) => {
-                                alert("Bad Request!")
-                            })
-
-                        }
                     }
-                }).catch((err) => {
-                    alert("Bad Request!");
+
+                }).catch((e) => {
+                    alert(e.response.data.error);
+                    if (e.response.data.auth === false) {
+                        alert("Please sign in again!");
+                        navigate('/Signin');
+                    }
                 })
         }
         return (<Button onClick={getDocument} variant="outlined">

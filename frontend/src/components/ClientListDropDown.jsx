@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -47,13 +47,14 @@ export default function ClientListDropDown(props) {
             }
         })
             .then((response) => {
-                if (response.data.error) {
-                    alert(response.data.error);
-                    if ((response.data.auth) && (response.data.auth === false)) {
-                        navigate('/Signin');
-                    }
-                } else {
-                    setClients(response.data);
+
+                setClients(response.data);
+
+            }).catch((e) => {
+                alert(e.response.data.error);
+                if (e.response.data.auth === false) {
+                    alert("Please sign in again!");
+                    navigate('/Signin');
                 }
             })
     }, []);
@@ -71,15 +72,15 @@ export default function ClientListDropDown(props) {
                 }
             })
                 .then((response) => {
-                    if (response.data.error) {
-                        alert(response.data.error);
-                        if ((response.data.auth) && (response.data.auth === false)) {
-                            navigate('/Signin');
-                        }
-                    } else {
-                        // console.log(response.data);
-                        alert(response.data);
-                        window.location.reload(true);
+
+                    alert(response.data);
+                    window.location.reload(true);
+
+                }).catch((e) => {
+                    alert(e.response.data.error);
+                    if (e.response.data.auth === false) {
+                        alert("Please sign in again!");
+                        navigate('/Signin');
                     }
                 })
         }

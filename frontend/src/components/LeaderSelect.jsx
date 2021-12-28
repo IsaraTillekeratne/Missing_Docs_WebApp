@@ -28,13 +28,14 @@ export default function LeaderSelect() {
             }
         })
             .then((response) => {
-                if (response.data.error) {
-                    alert(response.data.error);
-                    if ((response.data.auth) && (response.data.auth === false)) {
-                        navigate('/Signin');
-                    }
-                } else {
-                    setLeaders(response.data);
+
+                setLeaders(response.data);
+
+            }).catch((e) => {
+                alert(e.response.data.error);
+                if (e.response.data.auth === false) {
+                    alert("Please sign in again!");
+                    navigate('/Signin');
                 }
             })
     }, []);

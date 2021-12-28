@@ -8,7 +8,6 @@ import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import DocumentScannerRoundedIcon from '@mui/icons-material/DocumentScannerRounded';
-import User from './User';
 
 export default function SideBar(props) {
 

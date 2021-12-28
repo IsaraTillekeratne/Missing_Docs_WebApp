@@ -33,34 +33,39 @@ export default function Signin() {
                 userEmail: email,
                 userPassword: password,
             }).then((response) => {
-                //console.log(response);
-                // if (response.status === 400) { alert(response.data.error) }
-                if (response.data.error) alert(response.data.error);
-                else {
-                    localStorage.setItem("token", response.data.token);
-                    localStorage.setItem("name", response.data.name);
-                    //setAuthState(true);
 
-                    // navigate based on user role *************************************
-                    Axios.get(`${process.env.REACT_APP_SERVER}/UserRoles/getRole`, {
-                        headers: {
-                            "x-access-token": localStorage.getItem("token")
-                        }
-                    }).then((response) => {
-                        if (response.data.role) {
-                            let role = response.data.role;
-                            if (role === 'A') navigate("/AdminHome")
-                            else if (role === 'C') navigate("/ClientHome")
-                            else if (role === 'L') navigate("/LeaderHome")
-                            else if (role === 'M') navigate("/MemberHome")
-                        }
-                        else {
-                            navigate("/NoUserRole")
-                        }
-                    })
+                localStorage.setItem("token", response.data.token);
+                localStorage.setItem("name", response.data.name);
+                //setAuthState(true);
 
+                // navigate based on user role *************************************
+                Axios.get(`${process.env.REACT_APP_SERVER}/UserRoles/getRole`, {
+                    headers: {
+                        "x-access-token": localStorage.getItem("token")
+                    }
+                }).then((response) => {
+                    let role = response.data.role;
+                    if (role === 'A') navigate("/AdminHome")
+                    else if (role === 'C') navigate("/ClientHome")
+                    else if (role === 'L') navigate("/LeaderHome")
+                    else if (role === 'M') navigate("/MemberHome")
+                }).catch((e) => {
+                    alert(e.response.data.error);
+                    if (e.response.data.auth === false) {
+                        alert("Please sign in again!");
+                        navigate('/Signin');
+                    } else {
+                        navigate("/NoUserRole")
+                    }
+                })
+
+            }).catch((e) => {
+                alert(e.response.data.error);
+                if (e.response.data.auth === false) {
+                    alert("Please sign in again!");
+                    navigate('/Signin');
                 }
-            });
+            })
         }
     };
 

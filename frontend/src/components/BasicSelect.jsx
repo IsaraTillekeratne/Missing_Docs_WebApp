@@ -8,8 +8,6 @@ import IconButton from '@mui/material/IconButton';
 import SaveIcon from '@mui/icons-material/Save';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-// import { useDispatch } from 'react-redux';
-// import { set } from '../features/user'
 
 export default function BasicSelect(props) {
     let navigate = useNavigate();
@@ -32,14 +30,13 @@ export default function BasicSelect(props) {
                 }
             })
                 .then((response) => {
-                    if (response.data.error) {
-                        alert(response.data.error);
-                        if ((response.data.auth) && (response.data.auth === false)) {
-                            navigate('/Signin');
-                        }
-                    } else {
-                        // console.log(response.data);
-                        window.location.reload(true);
+                    alert(response.data)
+                    window.location.reload(true);
+                }).catch((e) => {
+                    alert(e.response.data.error);
+                    if (e.response.data.auth === false) {
+                        alert("Please sign in again!");
+                        navigate('/Signin');
                     }
                 })
         }

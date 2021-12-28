@@ -21,13 +21,14 @@ export default function TeamMembersList(props) {
             }
         })
             .then((response) => {
-                if (response.data.error) {
-                    alert(response.data.error);
-                    if ((response.data.auth) && (response.data.auth === false)) {
-                        navigate('/Signin');
-                    }
-                } else {
-                    setMembers(response.data);
+
+                setMembers(response.data);
+
+            }).catch((e) => {
+                alert(e.response.data.error);
+                if (e.response.data.auth === false) {
+                    alert("Please sign in again!");
+                    navigate('/Signin');
                 }
             })
     };
@@ -64,18 +65,7 @@ export default function TeamMembersList(props) {
                         <ListItemText primary={member.name + ' (' + member.email + ')'} />
                     </MenuItem>
                 ))}
-                {/* <MenuItem onClick={handleClose} disableRipple>
-                    Member 1
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                    Member 2
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                    Member 3
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                    Member 4
-                </MenuItem> */}
+
             </Menu>
         </div>
     );

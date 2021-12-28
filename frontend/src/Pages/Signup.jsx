@@ -35,11 +35,14 @@ export default function Signup() {
                 userEmail: email,
                 userPassword: password,
             }).then((response) => {
-                if (response.data.error) alert(response.data.error);
-                else {
-                    navigate("/Signin");
+                navigate("/Signin");
+            }).catch((e) => {
+                alert(e.response.data.error);
+                if (e.response.data.auth === false) {
+                    alert("Please sign in again!");
+                    navigate('/Signin');
                 }
-            });
+            })
         }
     };
 

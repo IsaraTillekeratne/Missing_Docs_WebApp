@@ -41,21 +41,15 @@ export default function ProvidedRequestsTable(props) {
             }
         })
             .then((response) => {
-                if (response.data.error) {
-                    console.log(response)
-                    alert(response.data.error);
-                    // redirection didnt work
-                    if ((response.data.auth) && (response.data.auth === false)) {
-                        navigate('/Signin');
-                    }
-                } else if (response.status === 400) {
-                    alert("Error 400 Bad Request!")
+
+                setReqs(response.data);
+
+            }).catch((e) => {
+                alert(e.response.data.error);
+                if (e.response.data.auth === false) {
+                    alert("Please sign in again!");
+                    navigate('/Signin');
                 }
-                else {
-                    setReqs(response.data);
-                }
-            }).catch((err) => {
-                alert("Bad Request!");
             })
     }, []);
 

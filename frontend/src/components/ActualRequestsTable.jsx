@@ -46,8 +46,6 @@ export default function ActualRequestsTable() {
             setFileUploadReqId(requestid);
         }
         const submitFile = (e) => {
-            // console.log(fileUploadReqId);
-            // console.log(file);
             const formData = new FormData();
             formData.append('file', file);
 
@@ -58,22 +56,14 @@ export default function ActualRequestsTable() {
                 }
             })
                 .then((response) => {
-                    if (response.data.error) {
-                        console.log(response)
-                        alert(response.data.error);
-                        // redirection didnt work
-                        if ((response.data.auth) && (response.data.auth === false)) {
-                            navigate('/Signin');
-                        }
-                    } else if (response.status === 400) {
-                        alert("Error 400 Bad Request!")
+                    alert(response.data);
+                    window.location.reload(true);
+                }).catch((e) => {
+                    alert(e.response.data.error);
+                    if (e.response.data.auth === false) {
+                        alert("Please sign in again!");
+                        navigate('/Signin');
                     }
-                    else {
-                        alert(response.data);
-                        window.location.reload(true);
-                    }
-                }).catch((err) => {
-                    alert("Bad Request!");
                     window.location.reload(true);
                 })
         }
@@ -95,21 +85,14 @@ export default function ActualRequestsTable() {
                 }
             })
                 .then((response) => {
-                    if (response.data.error) {
-                        alert(response.data.error);
-                        // redirection didnt work
-                        if ((response.data.auth) && (response.data.auth === false)) {
-                            navigate('/Signin');
-                        }
-                    } else if (response.status === 400) {
-                        alert("Error 400 Bad Request!")
+                    alert(response.data);
+                    window.location.reload(true);
+                }).catch((e) => {
+                    alert(e.response.data.error);
+                    if (e.response.data.auth === false) {
+                        alert("Please sign in again!");
+                        navigate('/Signin');
                     }
-                    else {
-                        alert(response.data);
-                        window.location.reload(true);
-                    }
-                }).catch((err) => {
-                    alert("Bad Request!");
                     window.location.reload(true);
                 })
         }
@@ -125,18 +108,12 @@ export default function ActualRequestsTable() {
             }
         })
             .then((response) => {
-                if (response.data.error) {
-                    console.log(response)
-                    alert(response.data.error);
-                    // redirection didnt work
-                    if ((response.data.auth) && (response.data.auth === false)) {
-                        navigate('/Signin');
-                    }
-                } else if (response.status === 400) {
-                    alert("Error 400 Bad Request!")
-                }
-                else {
-                    setReqs(response.data);
+                setReqs(response.data);
+            }).catch((e) => {
+                alert(e.response.data.error);
+                if (e.response.data.auth === false) {
+                    alert("Please sign in again!");
+                    navigate('/Signin');
                 }
             })
     }, []);

@@ -44,7 +44,6 @@ export default function AllUsersTable() {
                     alert("Please sign in again!");
                     navigate('/Signin');
                 }
-
             })
     }, []);
 
