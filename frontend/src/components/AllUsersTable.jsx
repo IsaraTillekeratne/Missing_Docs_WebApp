@@ -37,16 +37,14 @@ export default function AllUsersTable() {
             }
         })
             .then((response) => {
-                if (response.data.error) {
-                    console.log(response)
-                    alert(response.data.error);
-                    // redirection didnt work
-                    if ((response.data.auth) && (response.data.auth === false)) {
-                        navigate('/Signin');
-                    }
-                } else {
-                    setUsers(response.data);
+                setUsers(response.data);
+            }).catch((e) => {
+                alert(e.response.data.error);
+                if (e.response.data.auth === false) {
+                    alert("Please sign in again!");
+                    navigate('/Signin');
                 }
+
             })
     }, []);
 

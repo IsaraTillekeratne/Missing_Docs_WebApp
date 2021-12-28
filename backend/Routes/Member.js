@@ -10,7 +10,7 @@ Router.get("/clients", validateToken, memberRole, (req, res) => {
     const memberId = req.userId;
     const query = "SELECT id,name,email FROM user WHERE role = 'C' AND id IN(SELECT DISTINCT id_client FROM assigned_to WHERE id_member = ?)"
     db.query(query, memberId, (err, result) => {
-        if (err) res.send({ error: err });
+        if (err) res.status(400).send({ error: 'Bad request!' })
         else {
             res.send(result);
         }
@@ -30,13 +30,13 @@ Router.post("/sendRequests", validateToken, memberRole, (req, res) => {
     requests.map((request) => {
         db.query("INSERT INTO request (doc_date,amount,partner,comments,placed_date,member_id) VALUES (?,?,?,?,?,?)",
             [request[0], request[1], request[2], request[3], placed_date, memberId], (err, result) => {
-                if (err) res.send({ error: err });
+                if (err) res.status(400).send({ error: 'Bad request!' })
                 else {
                     // send to client
                     let requestId = result.insertId;
                     db.query("INSERT INTO sent (memberid,clientid,requestid,type) VALUES (?,?,?,?)",
                         [memberId, clientId, requestId, 'A'], (err, result) => {
-                            if (err) res.send({ error: err });
+                            if (err) res.status(400).send({ error: 'Bad request!' })
                         })
                 }
             })
@@ -52,13 +52,13 @@ Router.get("/requests", validateToken, memberRole, (req, res) => {
 
     // find requestids for the given pair of member-client
     db.query("SELECT requestid,document FROM sent WHERE clientid = ? AND memberid = ?", [clientId, memberId], (err, results) => {
-        if (err) res.sendStatus(400);
+        if (err) res.status(400).send({ error: 'Bad request!' })
         else {
             const requests = getRequests(...results);
             requests.then((response) => {
                 res.send(response);
             }).catch((err) => {
-                res.sendStatus(400);
+                res.status(400).send({ error: 'Bad request!' })
             })
 
         }
@@ -69,7 +69,7 @@ Router.get("/requests", validateToken, memberRole, (req, res) => {
 Router.delete("/deleteRequest", validateToken, memberRole, (req, res) => {
     const reqId = req.query.requestId;
     db.query("DELETE FROM request WHERE id = ? AND member_id = ?", [reqId, req.userId], (err, result) => {
-        if (err) res.sendStatus(400);
+        if (err) res.status(400).send({ error: 'Bad request!' })
         else res.send("Successfully deleted!")
         // note if a diff mem tries to delete although it shows succesful msg, the request won't be deleted
     })
@@ -85,7 +85,7 @@ Router.put("/editRequest", validateToken, memberRole, (req, res) => {
     const memberId = req.userId;
     db.query("UPDATE request SET doc_date = ?, amount = ?, partner = ?, comments = ? WHERE member_id = ? AND id = ?",
         [doc_date, amount, partner, comments, memberId, reqId], (err, result) => {
-            if (err) res.sendStatus(400);
+            if (err) res.status(400).send({ error: 'Bad request!' })
             else res.send("Successfully updated");
         })
 })

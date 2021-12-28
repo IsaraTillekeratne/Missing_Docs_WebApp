@@ -17,11 +17,11 @@ Router.post("/", validation(signupSchema), function (req, res) {
         [email],
         (err, result) => {
             if (err) {
-                res.status(400).send({ error: err });
+                res.status(400).send({ error: 'Bad request!' });
 
             }
             if (result.length > 0) {
-                res.send({ error: 'Username already exists' });
+                res.status(400).send({ error: "Username already exists" });
 
             }
             else {
@@ -37,11 +37,11 @@ Router.post("/", validation(signupSchema), function (req, res) {
                         [name, email, hash],
                         (err, result) => {
                             if (err) {
-                                res.status(400).send({ error: err });
+                                res.status(400).send({ error: "Bad request!" });
 
                             }
                             else {
-                                res.send({ message: 'successful' });
+                                res.send({ message: 'Successfully signed up!' });
 
                             }
 

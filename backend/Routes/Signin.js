@@ -18,7 +18,7 @@ Router.post("/", validation(signinSchema), async function (req, res) {
         email,
         (err, result) => {
             if (err) {
-                res.status(400).send({ error: err, auth: false });
+                res.status(400).send({ error: "Bad request!" });
 
             }
             if (result.length > 0) {
@@ -32,13 +32,13 @@ Router.post("/", validation(signinSchema), async function (req, res) {
 
                     }
                     else {
-                        res.send({ error: "Incorrect password", auth: false });
+                        res.status(401).send({ error: "Incorrect password" });
 
                     }
                 })
             }
             else {
-                res.send({ error: "User doesn't exist", auth: false });
+                res.status(401).send({ error: "User doesn't exist" });
 
             }
         });
