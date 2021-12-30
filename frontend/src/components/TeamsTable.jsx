@@ -11,16 +11,18 @@ import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import IconButton from '@mui/material/IconButton';
 import TeamMembersList from './TeamMembersList';
+import ClientListDropDown from './ClientListDropDown';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const columns = [
-    { id: 'id', label: 'Number', minWidth: 170 },
+    { id: 'id', label: 'Number', minWidth: 50 },
     { id: 'name', label: 'Leader Name', minWidth: 100 },
-    { id: 'email', label: 'Leader Email', minWidth: 170, align: 'right', },
-    { id: 'members', label: 'Team Members', minWidth: 170, align: 'right', },
-    { id: 'icon', label: 'Delete Team', minWidth: 170, align: 'right', },
-    { id: 'arrow', label: 'Show Requests', minWidth: 170, align: 'right', },
+    { id: 'email', label: 'Leader Email', minWidth: 100, align: 'right', },
+    { id: 'members', label: 'Team Members', minWidth: 100, align: 'right', },
+    { id: 'assignClients', label: 'Assign Clients', minWidth: 100, align: 'right', },
+    { id: 'icon', label: 'Delete Team', minWidth: 50, align: 'right', },
+    { id: 'arrow', label: 'Show Requests', minWidth: 50, align: 'right', },
 ];
 
 export default function StickyHeadTable() {
@@ -85,10 +87,15 @@ export default function StickyHeadTable() {
             })
     }, []);
 
+    const assignClients = (leaderId) => {
+        return (<ClientListDropDown user='A' leaderId={leaderId} />);
+    }
+
     leaders.map((leader) => {
         leader.members = showMembersList(leader.id);
         leader.icon = showIcon(leader.id);
         leader.arrow = showReqs(leader.id);
+        leader.assignClients = assignClients(leader.id);
     })
 
     const handleChangePage = (event, newPage) => {
@@ -102,7 +109,7 @@ export default function StickyHeadTable() {
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
+            <TableContainer sx={{ maxHeight: 520 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>

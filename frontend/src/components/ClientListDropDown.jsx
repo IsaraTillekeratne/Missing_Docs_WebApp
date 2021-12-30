@@ -41,7 +41,10 @@ export default function ClientListDropDown(props) {
 
     useEffect(() => {
 
-        Axios.get(`${process.env.REACT_APP_SERVER}/Leader/clients?memberId=${props.memberId}`, {
+        let url = `${process.env.REACT_APP_SERVER}/Leader/clients?memberId=${props.memberId}`;
+        if (props.user === 'A') url = `${process.env.REACT_APP_SERVER}/Admin/clients`;
+
+        Axios.get(url, {
             headers: {
                 "x-access-token": localStorage.getItem("token")
             }
@@ -62,27 +65,55 @@ export default function ClientListDropDown(props) {
     const addClients = () => {
 
         if (selectedClients.length === 0) alert("Please select clients");
+
         else {
-            Axios.post(`${process.env.REACT_APP_SERVER}/Leader/assignClients`, {
-                memberId: props.memberId,
-                clients: selectedClients,
-            }, {
-                headers: {
-                    "x-access-token": localStorage.getItem("token")
-                }
-            })
-                .then((response) => {
 
-                    alert(response.data);
-                    window.location.reload(true);
+            if (props.user === 'A') {
 
-                }).catch((e) => {
-                    alert(e.response.data.error);
-                    if (e.response.data.auth === false) {
-                        alert("Please sign in again!");
-                        navigate('/Signin');
+                Axios.put(`${process.env.REACT_APP_SERVER}/Admin/assignClients`, {
+                    leaderId: props.leaderId,
+                    clients: selectedClients,
+                }, {
+                    headers: {
+                        "x-access-token": localStorage.getItem("token")
                     }
                 })
+                    .then((response) => {
+
+                        alert(response.data);
+
+                    }).catch((e) => {
+                        alert(e.response.data.error);
+                        if (e.response.data.auth === false) {
+                            alert("Please sign in again!");
+                            navigate('/Signin');
+                        }
+                    })
+
+            }
+            else {
+                Axios.post(`${process.env.REACT_APP_SERVER}/Leader/assignClients`, {
+                    memberId: props.memberId,
+                    clients: selectedClients,
+                }, {
+                    headers: {
+                        "x-access-token": localStorage.getItem("token")
+                    }
+                })
+                    .then((response) => {
+
+                        alert(response.data);
+                        window.location.reload(true);
+
+                    }).catch((e) => {
+                        alert(e.response.data.error);
+                        if (e.response.data.auth === false) {
+                            alert("Please sign in again!");
+                            navigate('/Signin');
+                        }
+                    })
+
+            }
         }
 
 
@@ -92,7 +123,7 @@ export default function ClientListDropDown(props) {
         <div>
             <Grid container spacing={2}>
                 <Grid item xs={10}>
-                    <FormControl sx={{ m: 1, width: 400 }}>
+                    <FormControl sx={{ m: 1, width: 350 }}>
                         <InputLabel id="demo-multiple-checkbox-label">Add</InputLabel>
                         <Select
                             labelId="demo-multiple-checkbox-label"

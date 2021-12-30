@@ -17,9 +17,10 @@ Router.get("/members", validateToken, leaderRole, (req, res) => {
 
 // get all clients (ones not assigned to the current member)
 Router.get("/clients", validateToken, leaderRole, (req, res) => {
+    const leaderId = req.userId;
     const memberId = req.query.memberId;
-    const query = "SELECT id,name,email FROM user WHERE role = 'C' AND id NOT IN(SELECT DISTINCT id_client FROM assigned_to WHERE id_member = ?)"
-    db.query(query, memberId, (err, result) => {
+    const query = "SELECT id,name,email FROM user WHERE role = 'C' AND leader_id = ? AND id NOT IN(SELECT DISTINCT id_client FROM assigned_to WHERE id_member = ?)"
+    db.query(query, [leaderId, memberId], (err, result) => {
         if (err) res.status(400).send({ error: 'Bad request!' })
         else {
             res.send(result)

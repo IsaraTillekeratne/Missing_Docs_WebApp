@@ -53,12 +53,17 @@ Router.put("/changeRole", validateToken, adminRole, (req, res) => {
     }
     // handle if current role is client
     else if (currentRole === 'Client') {
-        // delete entries from sent and assigned to
+        // delete/update entries from sent and assigned to, set leader_id to null
         db.query("DELETE FROM assigned_to WHERE id_client = ?", id, (err, result) => {
             if (err) res.status(400).send({ error: 'Bad request!' })
             else {
                 db.query("UPDATE sent SET clientid = NULL WHERE clientid = ?", id, (err, result) => {
                     if (err) res.status(400).send({ error: 'Bad request!' })
+                    else {
+                        db.query("UPDATE user SET leader_id = NULL WHERE id = ?", id, (err, result) => {
+                            if (err) res.status(400).send({ error: 'Bad request!' })
+                        })
+                    }
                 })
             }
         })
@@ -246,6 +251,30 @@ Router.get("/memberDetails", validateToken, (req, res) => {
             res.send(result);
         }
     })
+})
+
+// get all clients
+Router.get("/clients", validateToken, adminRole, (req, res) => {
+    const query = "SELECT id,name,email FROM user WHERE role = 'C'"
+    db.query(query, (err, result) => {
+        if (err) res.status(400).send({ error: 'Bad request!' })
+        else {
+            res.send(result)
+        }
+    })
+})
+
+// assign clients to a leader
+Router.put("/assignClients", validateToken, adminRole, (req, res) => {
+    const leaderId = req.body.leaderId;
+    const clients = req.body.clients;
+    db.query("UPDATE user SET leader_id = ? WHERE role = 'C' AND id IN(?)", [leaderId, clients], (err, result) => {
+        if (err) res.status(400).send({ error: 'Bad request!' })
+        else {
+            res.send("Clients added succesfully!")
+        }
+    })
+
 })
 
 module.exports = Router;

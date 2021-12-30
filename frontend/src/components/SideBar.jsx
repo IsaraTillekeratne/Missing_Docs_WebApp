@@ -6,7 +6,6 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
-import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import DocumentScannerRoundedIcon from '@mui/icons-material/DocumentScannerRounded';
 import Button from '@mui/material/Button';
 import { AuthContext } from '../Helpers/AuthContext';
