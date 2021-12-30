@@ -55,13 +55,14 @@ Router.get("/requests", validateToken, memberRole, (req, res) => {
         if (err) res.status(400).send({ error: 'Bad request!' })
         else {
             if (results.length === 0) res.send([]);
-            const requests = getRequests(...results);
-            requests.then((response) => {
-                res.send(response);
-            }).catch((err) => {
-                res.status(400).send({ error: 'Bad request!' })
-            })
-
+            else {
+                const requests = getRequests(...results);
+                requests.then((response) => {
+                    res.send(response);
+                }).catch((err) => {
+                    res.status(400).send({ error: 'Bad request!' })
+                })
+            }
         }
     })
 })
