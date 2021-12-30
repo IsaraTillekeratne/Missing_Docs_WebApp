@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,10 +10,15 @@ import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
+import { AuthContext } from '../Helpers/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
 
 const drawerWidth = 240;
 
 function LeaderClientRequest(props) {
+    let navigate = useNavigate();
+    const { authState, setAuthState } = useContext(AuthContext);
     let { clientId } = useParams();
     const { window } = props;
     //const { mobileOpen, handleDrawerToggle } = SideBarLogic();
@@ -23,6 +28,12 @@ function LeaderClientRequest(props) {
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
+    const signout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("name");
+        setAuthState(false);
+        navigate('/');
+    }
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -71,7 +82,15 @@ function LeaderClientRequest(props) {
 
                     }}
                 ><User />
-
+                    {authState === true ? <Button
+                        variant="contained"
+                        fullWidth
+                        size="small"
+                        onClick={signout}
+                    >
+                        Log out
+                    </Button> :
+                        null}
                 </Drawer>
                 <Drawer
                     variant="permanent"
@@ -82,7 +101,15 @@ function LeaderClientRequest(props) {
                     }}
                     open
                 ><User />
-
+                    {authState === true ? <Button
+                        variant="contained"
+                        fullWidth
+                        size="small"
+                        onClick={signout}
+                    >
+                        Log out
+                    </Button> :
+                        null}
                 </Drawer>
             </Box>
             <Box

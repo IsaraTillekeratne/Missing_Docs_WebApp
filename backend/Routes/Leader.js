@@ -91,6 +91,7 @@ Router.get("/requests", validateToken, leaderRole, (req, res) => {
                         result.splice(nullIdIndexes[i], 1);
                     }
                     const len = result.length
+                    //if (len === 0) res.send([]);
                     let reqs = [];
                     let index = 0;
                     result.map((request) => {

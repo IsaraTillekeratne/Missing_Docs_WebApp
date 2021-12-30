@@ -44,7 +44,7 @@ function getRequests(...results) {
         for (var i = nullIdIndexes.length - 1; i >= 0; i--) {
             results.splice(nullIdIndexes[i], 1);
         }
-        if (results.length === 0) resolve(reqs);
+        // if (results.length === 0) resolve(reqs);
         // get requests data
         for (let i = 0; i < results.length; i++) {
             db.query("SELECT doc_date,amount,partner,comments FROM request WHERE id = ?", results[i].requestid, (err, result) => {
