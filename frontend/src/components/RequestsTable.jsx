@@ -45,7 +45,7 @@ export default function RequestsTable(props) {
 
     useEffect(() => {
         let endPoint = '';
-        if (props.user === 'A') endPoint = `${process.env.REACT_APP_SERVER}/Admin/requests?type=${view}`;
+        if (props.user === 'A') endPoint = `${process.env.REACT_APP_SERVER}/Admin/requests?leaderId=${props.leaderId}&type=${view}`;
         else if (props.user === 'L') endPoint = `${process.env.REACT_APP_SERVER}/Leader/requests?clientId=${props.clientId}&type=${view}`;
         Axios.get(endPoint, {
             headers: {

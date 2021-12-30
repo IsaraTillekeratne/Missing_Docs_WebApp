@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import IconButton from '@mui/material/IconButton';
 import TeamMembersList from './TeamMembersList';
 import Axios from 'axios';
@@ -19,9 +20,8 @@ const columns = [
     { id: 'email', label: 'Leader Email', minWidth: 170, align: 'right', },
     { id: 'members', label: 'Team Members', minWidth: 170, align: 'right', },
     { id: 'icon', label: 'Delete Team', minWidth: 170, align: 'right', },
+    { id: 'arrow', label: 'Show Requests', minWidth: 170, align: 'right', },
 ];
-
-
 
 export default function StickyHeadTable() {
     let navigate = useNavigate();
@@ -29,9 +29,14 @@ export default function StickyHeadTable() {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     let [leaders, setLeaders] = React.useState([]);
 
+    const showReqs = (leaderId) => {
+        let nextPage = `./AdminLeaderRequest/${leaderId}`;
+        return (<IconButton component="a" href={nextPage}>
+            <ArrowForwardIosRoundedIcon />
+        </IconButton>);
+    }
+
     const showIcon = (leaderId) => {
-
-
 
         const deleteTeam = () => {
             Axios.put(`${process.env.REACT_APP_SERVER}/Admin/deleteTeam`, {
@@ -83,6 +88,7 @@ export default function StickyHeadTable() {
     leaders.map((leader) => {
         leader.members = showMembersList(leader.id);
         leader.icon = showIcon(leader.id);
+        leader.arrow = showReqs(leader.id);
     })
 
     const handleChangePage = (event, newPage) => {

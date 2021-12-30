@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
-import SideBar from '../components/SideBar';
+//import SideBar from '../components/SideBar';
 import RequestsTable from '../components/RequestsTable';
 import User from '../components/User';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -11,13 +11,17 @@ import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
+import { useParams } from 'react-router-dom';
+import { AuthContext } from '../Helpers/AuthContext';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
-function AdminRequests(props) {
+function AdminLeaderRequest(props) {
+    let { leaderId } = useParams();
     let navigate = useNavigate();
+    const { authState, setAuthState } = useContext(AuthContext);
     const { window } = props;
     //const { mobileOpen, handleDrawerToggle } = SideBarLogic();
     const container = window !== undefined ? () => window().document.body : undefined;
@@ -26,6 +30,13 @@ function AdminRequests(props) {
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
+
+    const signout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("name");
+        setAuthState(false);
+        navigate('/');
+    }
 
     const backupDB = () => {
         Axios.get(`${process.env.REACT_APP_SERVER}/Admin/backupDB`, {
@@ -91,7 +102,16 @@ function AdminRequests(props) {
 
                     }}
                 ><User />
-                    <SideBar user='A' />
+                    {/* <SideBar user='A' /> */}
+                    {authState === true ? <Button
+                        variant="contained"
+                        fullWidth
+                        size="small"
+                        onClick={signout}
+                    >
+                        Log out
+                    </Button> :
+                        null}
                 </Drawer>
                 <Drawer
                     variant="permanent"
@@ -102,7 +122,16 @@ function AdminRequests(props) {
                     }}
                     open
                 ><User />
-                    <SideBar user='A' />
+                    {/* <SideBar user='A' /> */}
+                    {authState === true ? <Button
+                        variant="contained"
+                        fullWidth
+                        size="small"
+                        onClick={signout}
+                    >
+                        Log out
+                    </Button> :
+                        null}
                 </Drawer>
             </Box>
             <Box
@@ -110,7 +139,7 @@ function AdminRequests(props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <RequestsTable user='A' />
+                <RequestsTable user='A' leaderId={leaderId} />
                 <br></br>
                 <Button variant='outlined' size="large" onClick={backupDB}
                 >BACK UP DATABASE</Button>
@@ -121,4 +150,4 @@ function AdminRequests(props) {
 
 
 
-export default AdminRequests;
+export default AdminLeaderRequest;

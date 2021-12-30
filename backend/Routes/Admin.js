@@ -17,7 +17,7 @@ Router.get("/allUsers", validateToken, adminRole, (req, res) => {
     })
 });
 
-// change a user role -> incomplete
+// change a user role
 Router.put("/changeRole", validateToken, adminRole, (req, res) => {
     const role = req.body.userRole;
     const id = req.body.userId;
@@ -38,10 +38,10 @@ Router.put("/changeRole", validateToken, adminRole, (req, res) => {
                 db.query("DELETE FROM assigned_to WHERE id_member = ?", id, (err, result) => {
                     if (err) res.status(400).send({ error: 'Bad request!' })
                     else {
-                        db.query("DELETE from request WHERE member_id = ?", id, (err, result) => {
+                        db.query("UPDATE request SET member_id = NULL WHERE member_id = ?", id, (err, result) => {
                             if (err) res.status(400).send({ error: 'Bad request!' })
                             else {
-                                db.query("DELETE FROM sent WHERE memberid = ?", id, (err, result) => {
+                                db.query("UPDATE sent SET memberid = NULL WHERE memberid = ?", id, (err, result) => {
                                     if (err) res.status(400).send({ error: 'Bad request!' })
                                 })
                             }
@@ -57,7 +57,7 @@ Router.put("/changeRole", validateToken, adminRole, (req, res) => {
         db.query("DELETE FROM assigned_to WHERE id_client = ?", id, (err, result) => {
             if (err) res.status(400).send({ error: 'Bad request!' })
             else {
-                db.query("DELETE FROM sent WHERE clientid = ?", id, (err, result) => {
+                db.query("UPDATE sent SET clientid = NULL WHERE clientid = ?", id, (err, result) => {
                     if (err) res.status(400).send({ error: 'Bad request!' })
                 })
             }
@@ -142,36 +142,49 @@ Router.put("/deleteTeam", validateToken, adminRole, (req, res) => {
 
 // get all requests
 Router.get("/requests", validateToken, adminRole, (req, res) => {
+    const leaderId = req.query.leaderId;
     const type = req.query.type;
-    db.query("SELECT requestid FROM sent WHERE type = ?", type, (err, result) => {
+    // find this leaders members
+    db.query("SELECT id FROM user WHERE role = 'M' AND leader_id = ?", leaderId, (err, members) => {
         if (err) res.status(400).send({ error: 'Bad request!' })
+        let memberIds = [];
+        members.map((member) => {
+            memberIds.push(member.id);
+        })
+        if (memberIds.length === 0) res.send([]);
         else {
-            if (result.length === 0) res.send([]);
-            // remove null requestids
-            let nullIdIndexes = [];
-            for (let i = 0; i < result.length; i++) {
-                if (result[i].requestid === null) nullIdIndexes.push(i);
-            }
-
-            for (var i = nullIdIndexes.length - 1; i >= 0; i--) {
-                result.splice(nullIdIndexes[i], 1);
-            }
-            const len = result.length
-            let reqs = [];
-            let index = 0;
-            result.map((request) => {
-                db.query("SELECT id,doc_date,placed_date,amount,partner,comments FROM request WHERE id = ?", request.requestid, (err, queryRes) => {
-                    if (err) res.status(400).send({ error: 'Bad request!' })
-                    else {
-                        reqs.push(queryRes[0]);
-                        if (index === len - 1) res.send(reqs);
-                        else index = index + 1;
-
+            db.query("SELECT requestid FROM sent WHERE type = ? AND memberid IN(?)", [type, memberIds], (err, result) => {
+                if (err) res.status(400).send({ error: 'Bad request!' })
+                else {
+                    if (result.length === 0) res.send([]);
+                    // remove null requestids
+                    let nullIdIndexes = [];
+                    for (let i = 0; i < result.length; i++) {
+                        if (result[i].requestid === null) nullIdIndexes.push(i);
                     }
-                })
+
+                    for (var i = nullIdIndexes.length - 1; i >= 0; i--) {
+                        result.splice(nullIdIndexes[i], 1);
+                    }
+                    const len = result.length
+                    let reqs = [];
+                    let index = 0;
+                    result.map((request) => {
+                        db.query("SELECT id,doc_date,placed_date,amount,partner,comments FROM request WHERE id = ?", request.requestid, (err, queryRes) => {
+                            if (err) res.status(400).send({ error: 'Bad request!' })
+                            else {
+                                reqs.push(queryRes[0]);
+                                if (index === len - 1) res.send(reqs);
+                                else index = index + 1;
+
+                            }
+                        })
+                    })
+                }
             })
         }
     })
+
 
 });
 
