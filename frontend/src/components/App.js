@@ -5,6 +5,7 @@ import Signup from '../Pages/Signup';
 import Signin from '../Pages/Signin';
 import ErrorPage from '../Pages/ErrorPage';
 import AdminHome from '../Pages/AdminHome';
+import AdminClients from '../Pages/AdminClients';
 import AdminCreateTeams from '../Pages/AdminCreateTeams';
 import AdminLeaderRequest from '../Pages/AdminLeaderRequest';
 import LeaderHome from '../Pages/LeaderHome';
@@ -13,6 +14,7 @@ import LeaderClientRequest from '../Pages/LeaderClientRequest';
 import MemberHome from '../Pages/MemberHome';
 import MemberClientRequest from '../Pages/MemberClientRequest';
 import ClientHome from '../Pages/ClientHome';
+import ClientMembers from '../Pages/ClientMembers';
 import ClientProvided from '../Pages/ClientProvided';
 import NoUserRole from '../Pages/NoUserRole';
 import { AuthContext } from '../Helpers/AuthContext';
@@ -46,6 +48,7 @@ function App() {
                     <Route path="/Signup" element={<Signup />} />
                     <Route path="/Signin" element={<Signin />} />
                     <Route path="/AdminHome" element={<AdminHome />} />
+                    <Route path="/AdminClients" element={<AdminClients />} />
                     <Route path="/AdminTeams" element={<AdminHome />} />
                     <Route path="/AdminCreateTeams" element={<AdminCreateTeams />} />
                     <Route path="/AdminLeaderRequest/:leaderId" element={<AdminLeaderRequest />} />
@@ -56,6 +59,7 @@ function App() {
                     <Route path="/MemberHome" element={<MemberHome />} />
                     <Route path="/MemberClientRequest/:clientId" element={<MemberClientRequest />} />
                     <Route path="/ClientHome" element={<ClientHome />} />
+                    <Route path="/ClientMembers" element={<ClientMembers />} />
                     <Route path="/ClientActual" element={<ClientHome />} />
                     <Route path="/ClientProvided" element={<ClientProvided />} />
                     <Route path="/NoUserRole" element={<NoUserRole />} />

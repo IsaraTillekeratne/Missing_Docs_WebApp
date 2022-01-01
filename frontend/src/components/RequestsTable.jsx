@@ -24,7 +24,7 @@ const columns = [
     { id: 'amount', label: 'Amount', minWidth: 100, align: 'left', },
     { id: 'partner', label: 'Partner', minWidth: 100, align: 'left', },
     { id: 'comments', label: 'Comments', minWidth: 150, align: 'left', },
-    { id: 'member_id', label: 'Team Member', minWidth: 100, align: 'left', },
+    { id: 'member_id', label: 'Team Member Id', minWidth: 100, align: 'left', },
     { id: 'document', label: 'Document', minWidth: 150, align: 'right', },
 ];
 
@@ -34,7 +34,6 @@ export default function RequestsTable(props) {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [reqs, setReqs] = useState([]);
     const [view, setView] = useState("A"); // for actual and provided toggle
-    const [memberEmail, setMemberEmail] = useState('');
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -143,32 +142,8 @@ export default function RequestsTable(props) {
         </div>)
     }
 
-    const getMemberEmail = (memberId) => {
-        if (Number.isInteger(memberId)) {
-            Axios.get(`${process.env.REACT_APP_SERVER}/Admin/memberDetails?memberId=${memberId}`, {
-                headers: {
-                    "x-access-token": localStorage.getItem("token")
-                }
-            })
-                .then((response) => {
-                    setMemberEmail(response.data[0].email);
-                }).catch((e) => {
-                    //alert(e.response.data.error);
-                    // if (e.response.data[0].auth === false) {
-                    //     alert("Please sign in again!");
-                    //     navigate('/Signin');
-                    // }
-                })
-        }
-
-
-    }
-
-
     reqs.map((req) => {
         req.document = showDownload(req.id);
-        getMemberEmail(req.member_id);
-        req.member_id = memberEmail;
     })
 
     const handleView = (event) => {

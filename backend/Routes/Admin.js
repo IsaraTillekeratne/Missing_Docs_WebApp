@@ -91,6 +91,18 @@ Router.get("/leaders", validateToken, adminRole, (req, res) => {
 // delete a user
 Router.delete("/deleteUser", validateToken, adminRole, (req, res) => {
     const id = req.query.id;
+    const role = req.query.userRole;
+    // when a member is deleted, delete his requests
+    if (role === 'Team Member') {
+        db.query("DELETE FROM sent WHERE memberid = ?", id, (err, result) => {
+            if (err) res.status(400).send({ error: 'Bad request!' })
+            else {
+                db.query("DELETE from request WHERE member_id = ?", id, (err, result) => {
+                    if (err) res.status(400).send({ error: 'Bad request!' })
+                })
+            }
+        })
+    }
     db.query("DELETE FROM user WHERE id = ?", id, (err, result) => {
         if (err) res.status(400).send({ error: 'Bad request!' })
         else res.send("User Deleted!");
@@ -239,23 +251,24 @@ Router.get("/backupDB", validateToken, adminRole, (req, res) => {
     res.send("Database Back Up Created On Server!")
 })
 
-// get member email, name
-Router.get("/memberDetails", validateToken, (req, res) => {
-    const memberId = req.query.memberId;
-    db.query("SELECT email FROM user WHERE id = ? AND role = 'M'", memberId, (err, result) => {
-        if (err) {
-            console.log(err)
-            res.status(400).send({ error: 'Bad request!' })
-        }
-        else {
-            res.send(result);
-        }
-    })
-})
+// // get member email, name
+// Router.get("/memberDetails", validateToken, (req, res) => {
+//     const memberId = req.query.memberId;
+//     db.query("SELECT email FROM user WHERE id = ? AND role = 'M'", memberId, (err, result) => {
+//         if (err) {
+//             console.log(err)
+//             res.status(400).send({ error: 'Bad request!' })
+//         }
+//         else {
+//             res.send(result);
+//         }
+//     })
+// })
+
 
 // get all clients
 Router.get("/clients", validateToken, adminRole, (req, res) => {
-    const query = "SELECT id,name,email FROM user WHERE role = 'C'"
+    const query = "SELECT id,name,email,leader_id FROM user WHERE role = 'C'"
     db.query(query, (err, result) => {
         if (err) res.status(400).send({ error: 'Bad request!' })
         else {
@@ -275,6 +288,21 @@ Router.put("/assignClients", validateToken, adminRole, (req, res) => {
         }
     })
 
+})
+
+// change client's leader
+Router.put("/reassignClient", validateToken, adminRole, (req, res) => {
+    const leaderId = req.body.leaderId;
+    const clientId = req.body.clientId;
+    db.query("UPDATE user SET leader_id = ? WHERE role = 'C' AND id = ?", [leaderId, clientId], (err, result) => {
+        if (err) {
+
+            res.status(400).send({ error: 'Bad request!' })
+        }
+        else {
+            res.send("Client reassigned succesfully!")
+        }
+    })
 })
 
 module.exports = Router;

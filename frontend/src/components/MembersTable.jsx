@@ -12,10 +12,10 @@ import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const columns = [
-    { id: 'id', label: 'Member Id', minWidth: 170 },
+    { id: 'id', label: 'Member Id', minWidth: 50 },
     { id: 'name', label: 'Member Name', minWidth: 100 },
-    { id: 'email', label: 'Member Email', minWidth: 170, align: 'right', },
-    { id: 'icon', label: 'Add Clients', minWidth: 170, align: 'right', },
+    { id: 'email', label: 'Member Email', minWidth: 100, align: 'right', },
+    { id: 'icon', label: 'Add Clients', minWidth: 120, align: 'right', },
 ];
 
 const showIcon = (memberId) => {

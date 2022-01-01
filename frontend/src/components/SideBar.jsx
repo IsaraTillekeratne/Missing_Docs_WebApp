@@ -20,9 +20,9 @@ export default function SideBar(props) {
     let titles;
 
     if (props.user === 'A') {
-        links = ['./AdminTeams', './AdminCreateTeams']
-        icons = [<GroupsRoundedIcon />, <AddCircleRoundedIcon />]
-        titles = ['Teams', 'Create Teams']
+        links = ['./AdminTeams', './AdminCreateTeams', './AdminClients']
+        icons = [<GroupsRoundedIcon />, <AddCircleRoundedIcon />, <GroupsRoundedIcon />]
+        titles = ['Teams', 'Create Teams', 'Clients']
     } else if (props.user === 'L') {
         links = ['./LeaderClients', './LeaderMembers']
         icons = [<DocumentScannerRoundedIcon />, <GroupsRoundedIcon />]
@@ -32,9 +32,9 @@ export default function SideBar(props) {
         icons = []
         titles = []
     } else if (props.user === 'C' || props.user === 'CP') {
-        links = ['./ClientActual', './ClientProvided']
-        icons = [<DocumentScannerRoundedIcon />, <DocumentScannerRoundedIcon />]
-        titles = ['Actual Requests', 'Provided Requests']
+        links = ['./ClientActual', './ClientProvided', './ClientMembers']
+        icons = [<DocumentScannerRoundedIcon />, <DocumentScannerRoundedIcon />, <GroupsRoundedIcon />]
+        titles = ['Actual Requests', 'Provided Requests', 'Assigned Members']
     }
 
     function renderIcon(index) {

@@ -55,7 +55,7 @@ export default function LeaderSelect() {
                     onChange={handleChange}
                 >
                     {leaders.map((leader) => {
-                        return <MenuItem value={leader.id} key={leader.id}>{leader.name} ({leader.email})</MenuItem>
+                        return <MenuItem value={leader.id} key={leader.id}>{leader.id}) {leader.name} ({leader.email})</MenuItem>
                     })}
                 </Select>
 

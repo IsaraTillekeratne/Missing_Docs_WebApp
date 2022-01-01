@@ -15,9 +15,10 @@ import { useNavigate } from 'react-router-dom';
 
 const columns = [
     { id: 'doc_date', label: 'Document Date', minWidth: 120 },
-    { id: 'amount', label: 'Amount', minWidth: 150 },
+    { id: 'amount', label: 'Amount', minWidth: 100 },
     { id: 'partner', label: 'Partner', minWidth: 100, align: 'left', },
     { id: 'comments', label: 'Comments', minWidth: 200, align: 'left', },
+    { id: 'memberid', label: 'Member Id', minWidth: 100, align: 'left', },
     { id: 'received', label: 'Received', minWidth: 120, align: 'right', },
     { id: 'upload', label: 'Upload', minWidth: 150, align: 'right', },
 ];
@@ -29,6 +30,7 @@ export default function ActualRequestsTable() {
     const [reqs, setReqs] = useState([]);
     const [file, setFile] = useState(null);
     const [fileUploadReqId, setFileUploadReqId] = useState(null);
+    //const [memberEmail, setMemberEmail] = useState('');
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -118,9 +120,31 @@ export default function ActualRequestsTable() {
             })
     }, []);
 
+    // const showMember = (memberId) => {
+    //     if (Number.isInteger(memberId)) {
+    //         Axios.get(`${process.env.REACT_APP_SERVER}/Admin/memberDetails?memberId=${memberId}`, {
+    //             headers: {
+    //                 "x-access-token": localStorage.getItem("token")
+    //             }
+    //         })
+    //             .then((response) => {
+    //                 setMemberEmail(response.data[0].email);
+    //             }).catch((e) => {
+
+    //             })
+    //     }
+    // }
+
     reqs.map((req) => {
         req.received = showIconMark(req.requestid)
         req.upload = showIconUpload(req.requestid);
+        // if (req.memberid !== null) {
+        //     showMember(req.memberid);
+        //     req.member = memberEmail;
+        // } else {
+        //     req.member = '';
+        // }
+
     })
 
     return (

@@ -50,10 +50,10 @@ export default function AllUsersTable() {
             })
     }, []);
 
-    const showIconDel = (id) => {
+    const showIconDel = (id, role) => {
 
         const deleteUser = () => {
-            Axios.delete(`${process.env.REACT_APP_SERVER}/Admin/deleteUser?id=${id}`, {
+            Axios.delete(`${process.env.REACT_APP_SERVER}/Admin/deleteUser?id=${id}&userRole=${role}`, {
                 headers: {
                     "x-access-token": localStorage.getItem("token")
                 }
@@ -80,7 +80,7 @@ export default function AllUsersTable() {
         else if (user.role === 'C') user.role = 'Client';
         if (user.role !== 'Admin') {
             user.icon = showIcon(user.id, user.role);
-            user.delete = showIconDel(user.id);
+            user.delete = showIconDel(user.id, user.role);
         }
 
     })

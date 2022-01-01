@@ -27,25 +27,34 @@ export default function BasicSelect(props) {
 
     const saveRole = () => {
         if (isRoleChange) {
-            Axios.put(`${process.env.REACT_APP_SERVER}/Admin/changeRole`, {
-                userRole: userRole,
-                userId: props.userId,
-                currentRole: props.userRole
-            }, {
-                headers: {
-                    "x-access-token": localStorage.getItem("token")
-                }
-            })
-                .then((response) => {
-                    alert(response.data)
-                    window.location.reload(true);
-                }).catch((e) => {
-                    alert(e.response.data.error);
-                    if (e.response.data.auth === false) {
-                        alert("Please sign in again!");
-                        navigate('/Signin');
+            let changeFrom = '';
+            if (props.userRole === 'Client') changeFrom = 'C';
+            else if (props.userRole === 'Team Member') changeFrom = 'M';
+            else if (props.userRole === 'Team Leader') changeFrom = 'L';
+            if (changeFrom === userRole) {
+                alert('No changes done since the same user was selected!')
+            } else {
+                Axios.put(`${process.env.REACT_APP_SERVER}/Admin/changeRole`, {
+                    userRole: userRole,
+                    userId: props.userId,
+                    currentRole: props.userRole
+                }, {
+                    headers: {
+                        "x-access-token": localStorage.getItem("token")
                     }
                 })
+                    .then((response) => {
+                        alert(response.data)
+                        window.location.reload(true);
+                    }).catch((e) => {
+                        alert(e.response.data.error);
+                        if (e.response.data.auth === false) {
+                            alert("Please sign in again!");
+                            navigate('/Signin');
+                        }
+                    })
+            }
+
         }
     }
 

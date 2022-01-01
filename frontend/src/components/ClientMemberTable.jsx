@@ -11,21 +11,18 @@ import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const columns = [
-    { id: 'doc_date', label: 'Document Date', minWidth: 120 },
-    { id: 'amount', label: 'Amount', minWidth: 150 },
-    { id: 'partner', label: 'Partner', minWidth: 100, align: 'left', },
-    { id: 'comments', label: 'Comments', minWidth: 200, align: 'left', },
-    { id: 'memberid', label: 'Member Id', minWidth: 100, align: 'left', },
+    { id: 'id', label: 'Member Id', minWidth: 50 },
+    { id: 'name', label: 'Member Name', minWidth: 100 },
+    { id: 'email', label: 'Member Email', minWidth: 100, align: 'right', },
 ];
 
 
 
-export default function ProvidedRequestsTable(props) {
+export default function ClientMemberTable() {
     let navigate = useNavigate();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [reqs, setReqs] = useState([]);
-    //const [memberEmail, setMemberEmail] = useState('');
+    let [members, setMembers] = useState([]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -37,14 +34,14 @@ export default function ProvidedRequestsTable(props) {
     };
 
     useEffect(() => {
-        Axios.get(`${process.env.REACT_APP_SERVER}/Client/requestsProvided`, {
+        Axios.get(`${process.env.REACT_APP_SERVER}/Client/myMembers`, {
             headers: {
                 "x-access-token": localStorage.getItem("token")
             }
         })
             .then((response) => {
 
-                setReqs(response.data);
+                setMembers(response.data);
 
             }).catch((e) => {
                 alert(e.response.data.error);
@@ -55,36 +52,11 @@ export default function ProvidedRequestsTable(props) {
             })
     }, []);
 
-    // const showMember = (memberId) => {
-    //     if (Number.isInteger(memberId)) {
-    //         Axios.get(`${process.env.REACT_APP_SERVER}/Admin/memberDetails?memberId=${memberId}`, {
-    //             headers: {
-    //                 "x-access-token": localStorage.getItem("token")
-    //             }
-    //         })
-    //             .then((response) => {
-    //                 setMemberEmail(response.data[0].email);
-    //             }).catch((e) => {
-
-    //             })
-    //     }
-    // }
-
-    // reqs.map((req) => {
-    //     if (req.memberid !== null) {
-    //         showMember(req.memberid);
-    //         req.member = memberEmail;
-    //     } else {
-    //         req.member = '';
-    //     }
-
-    // })
-
 
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 520 }}>
+            <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
@@ -100,13 +72,13 @@ export default function ProvidedRequestsTable(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {reqs
+                        {members
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((req) => {
+                            .map((member) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={req.requestid}>
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={member.id}>
                                         {columns.map((column) => {
-                                            const value = req[column.id];
+                                            const value = member[column.id];
                                             return (
                                                 <TableCell key={column.id} align={column.align}>
                                                     {value}
@@ -122,7 +94,7 @@ export default function ProvidedRequestsTable(props) {
             <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={reqs.length}
+                count={members.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
